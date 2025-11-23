@@ -54,6 +54,16 @@ class RaukInventoryClient {
             throw new Error('apiKeyId, apiSecret and apiPublicKey are required');
         }
 
+        if (apiKeyId.length !== 24) {
+            throw new Error('apiKeyId must be 32 characters long');
+        }
+        if (apiPublicKey.length !== 32) {
+            throw new Error('apiPublicKey must be 32 characters long');
+        }
+        if (apiSecret.length !== 64) {
+            throw new Error('apiSecret must be 64 characters long');
+        }
+
         this.apiKeyId = apiKeyId;
         this.apiSecret = apiSecret;
         this.apiPublicKey = apiPublicKey;
@@ -108,7 +118,8 @@ class RaukInventoryClient {
                 throw parseApiError(response, errorBody);
             }
 
-            return await response.json();
+            const data = await response.json();
+            return data.data;
         } catch (error) {
             // Re-throw Rauk errors as-is
             if (error instanceof RaukError) {
