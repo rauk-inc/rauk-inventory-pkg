@@ -263,11 +263,11 @@ class RaukInventoryClient {
 		query: OperationQuery,
 		update: OperationUpdateItem,
 		options?: OperationRequestOptions,
-	): Promise<OperationUpdateResult> {
+	): Promise<InventoryItem> {
 		const requestArray = options
 			? ["findOneAndUpdate", query, update, options]
 			: ["findOneAndUpdate", query, update];
-		return this.request<OperationUpdateResult>(requestArray);
+		return this.request<InventoryItem>(requestArray);
 	}
 
 	/**

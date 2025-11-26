@@ -6,7 +6,6 @@ import type {
 	OperationRequestOptions,
 	OperationDeleteResult,
 	OperationUpdateResult,
-	OperationInsertResult,
 	OperationUpdateItem,
 } from "./types/operations";
 import type { InventoryItem } from "./types/item";
@@ -181,7 +180,7 @@ export class RaukInventory extends RaukInventoryClient {
 		query: OperationQuery,
 		update: OperationUpdateItem,
 		options?: OperationRequestOptions,
-	): Promise<OperationUpdateResult> {
+	): Promise<InventoryItem> {
 		if (!RaukInventory.instance) {
 			throw new Error(
 				'RaukInventory must be initialized with "new RaukInventory(config)" before calling static methods.',
