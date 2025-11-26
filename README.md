@@ -72,7 +72,7 @@ const items = await RaukInventory.find({
 // Update items
 const result = await RaukInventory.update(
   { sku: "ITEM-001" },
-  { $set: { packageQuantity: 20 } }
+  { packageQuantity: 20 }
 );
 
 // Aggregate data
@@ -98,7 +98,7 @@ const items = await client.find({ sku: "ITEM-001" });
 const item = await client.findOne({ sku: "ITEM-001" });
 const result = await client.update(
   { sku: "ITEM-001" },
-  { $set: { packageQuantity: 20 } }
+  { packageQuantity: 20 } 
 );
 ```
 
@@ -358,7 +358,7 @@ const operations = [
   {
     updateOne: {
       filter: { sku: "ITEM-001" },
-      update: { $set: { packageQuantity: 20 } },
+      update: { packageQuantity: 20 },
     },
   },
   {
@@ -394,8 +394,8 @@ await RaukInventory.updateBatch(updates: [OperationQuery, OperationUpdateItem][]
 
 ```typescript
 const batchUpdates = [
-  [{ sku: "ITEM-001" }, { $set: { packageQuantity: 20 } }],
-  [{ sku: "ITEM-002" }, { $set: { color: { name: "Blue" } } }],
+  [{ sku: "ITEM-001" }, { packageQuantity: 20 } ],
+  [{ sku: "ITEM-002" }, { color: { name: "Blue" } }],
 ];
 
 const result = await RaukInventory.updateBatch(batchUpdates);

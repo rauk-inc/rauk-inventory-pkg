@@ -11,7 +11,4 @@ export type OperationUpdateItem = {
 	entities?: never;
 	locationHistory?: never;
 	id?: never;
-	$set?: {
-		[K in DotNotationPaths<InventoryItem>]?: InventoryItemFieldValues[K];
-	};
 };

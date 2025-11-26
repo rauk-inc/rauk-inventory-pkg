@@ -189,7 +189,7 @@ export type OperationQueryAvailability = OperationAvailabilityMap<
 // Bulk Write operation types
 export interface OperationUpdateOne {
 	filter: OperationQuery;
-	update: OperationUpdateItem; // MongoDB update operators like $set, $inc, etc.
+	update: OperationUpdateItem;
 }
 
 export interface OperationInsertOne {
