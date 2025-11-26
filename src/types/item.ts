@@ -1,15 +1,17 @@
-interface StatusDetails {
+interface BaseStatusDetails {
 	orderId?: string;
 	date?: Date;
+}
+
+interface ReservedStatusDetails extends BaseStatusDetails {
 	temporary?: boolean;
 	expiration?: Date;
 }
 
-type AvailabilityStatuses<T> = {
-	produced?: T;
-	reserved?: T;
-	sold?: T;
-	[status: string]: T | undefined;
+type AvailabilityStatuses = {
+	produced?: BaseStatusDetails;
+	reserved?: ReservedStatusDetails;
+	sold?: BaseStatusDetails;
 };
 
 interface Entities {
@@ -65,7 +67,7 @@ export interface InventoryItem {
 	readonly entities: Entities;
 	currentLocation: Location;
 	transitTo?: TransitTo;
-	availability: AvailabilityStatuses<StatusDetails>;
+	availability: AvailabilityStatuses;
 	sku: string;
 	brandDetails?: BrandDetails;
 	packageQuantity: number;
@@ -78,12 +80,29 @@ export interface InventoryItem {
 	readonly id: string;
 }
 
+export interface UpdateInventoryItem {
+	hardcode?: string;
+	readonly entities: Entities;
+	currentLocation: Location;
+	transitTo?: TransitTo;
+	availability: AvailabilityStatuses;
+	sku: string;
+	brandDetails?: BrandDetails;
+	packageQuantity: number;
+	color: Color;
+	factoryDetails?: FactoryDetails;
+	deleted: Deleted;
+	locationHistory?: LocationHistoryEntry[];
+	createdAt?: Date;
+	updatedAt?: Date;
+	readonly id: string;
+}
 export interface QueryInventoryItem {
 	readonly hardcode: string;
 	readonly entities: Entities;
 	readonly currentLocation: Location;
 	readonly transitTo: TransitTo;
-	readonly availability: AvailabilityStatuses<StatusDetails>;
+	readonly availability: AvailabilityStatuses;
 	readonly sku: string;
 	readonly brandDetails: BrandDetails;
 	readonly packageQuantity: number;

@@ -25,15 +25,21 @@ export interface OperationLocationHistoryEntry {
 export interface OperationStatusDetails {
 	orderId?: string;
 	date?: string;
+}
+
+export interface OperationReservedStatusDetails extends OperationStatusDetails {
 	temporary?: boolean;
 	expiration?: string;
 }
 
-type OperationAvailabilityMap<T> = {
-	produced?: T;
-	reserved?: T;
-	sold?: T;
-	[status: string]: T | undefined;
+type OperationAvailabilityMap<
+	Produced,
+	Reserved = Produced,
+	Sold = Produced,
+> = {
+	produced?: Produced;
+	reserved?: Reserved;
+	sold?: Sold;
 };
 
 // Entities types
@@ -74,8 +80,11 @@ export interface OperationFactoryDetails {
 }
 
 // Availability types
-export type OperationAvailability =
-	OperationAvailabilityMap<OperationStatusDetails>;
+export type OperationAvailability = OperationAvailabilityMap<
+	OperationStatusDetails,
+	OperationReservedStatusDetails,
+	OperationStatusDetails
+>;
 
 // Base Item types (for create/update operations)
 export interface OperationBaseItem {
@@ -163,12 +172,19 @@ export interface OperationQueryFactoryDetails {
 export interface OperationQueryStatusDetails {
 	orderId?: string | Record<string, any>;
 	date?: string | Record<string, any>;
+}
+
+export interface OperationQueryReservedStatusDetails
+	extends OperationQueryStatusDetails {
 	temporary?: boolean | Record<string, any>;
 	expiration?: string | Record<string, any>;
 }
 
-export type OperationQueryAvailability =
-	OperationAvailabilityMap<OperationQueryStatusDetails>;
+export type OperationQueryAvailability = OperationAvailabilityMap<
+	OperationQueryStatusDetails,
+	OperationQueryReservedStatusDetails,
+	OperationQueryStatusDetails
+>;
 
 // Bulk Write operation types
 export interface OperationUpdateOne {

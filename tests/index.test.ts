@@ -129,6 +129,40 @@ describe("RaukInventory", () => {
 		);
 	});
 
+	it("should update reserved availability metadata", async () => {
+		new RaukInventory(config);
+		const query = { sku: "ITEM-RESERVED" };
+		const update: OperationUpdateItem = {
+			"availability.reserved.temporary": false,
+			"availability.reserved.expiration": new Date("2025-01-25T14:30:00Z"),
+		};
+		jest.spyOn(global, "fetch").mockResolvedValue({
+			ok: true,
+			json: async () => ({
+				data: {
+					sku: "ITEM-RESERVED",
+					availability: {
+						reserved: { temporary: false, expiration: "2025-01-25T14:30:00Z" },
+					},
+				},
+			}),
+		} as Response);
+		const result = await RaukInventory.update(query, update);
+		expect(result).toEqual({
+			sku: "ITEM-RESERVED",
+			availability: {
+				reserved: { temporary: false, expiration: "2025-01-25T14:30:00Z" },
+			},
+		});
+		expect(fetch).toHaveBeenCalledWith(
+			`${config.apiBaseUrl}/query`,
+			expect.objectContaining({
+				method: "POST",
+				body: JSON.stringify(["findOneAndUpdate", query, update]),
+			}),
+		);
+	});
+
 	it("should updateMany via static method", async () => {
 		new RaukInventory(config);
 		const query = { "entities.factoryId": "factory-789" };
@@ -204,13 +238,47 @@ describe("RaukInventory", () => {
 
 	it("should findOne return null when no item found", async () => {
 		new RaukInventory(config);
-		const query = { "availability.produced.orderId": { $ne: null } };
+		const query = {
+			"availability.produced.orderId": { $ne: null },
+			"availability.reserved.temporary": true,
+		};
 		jest.spyOn(global, "fetch").mockResolvedValue({
 			ok: true,
 			json: async () => ({ data: [] }),
 		} as Response);
 		const result = await RaukInventory.findOne(query);
 		expect(result).toBeNull();
+	});
+
+	it("should support complex nested availability operators", async () => {
+		new RaukInventory(config);
+		const query: OperationQuery = {
+			"availability.produced.orderId": { $ne: null },
+			"availability.reserved.temporary": { $eq: true },
+			"availability.reserved.orderId": { $in: ["res-123", null] },
+			"availability.reserved.expiration": {
+				$gte: new Date("2025-01-01T00:00:00Z"),
+			},
+		};
+		const items = [
+			{
+				sku: "ITEM-RESERVED",
+				availability: { reserved: { temporary: true } },
+			},
+		];
+		jest.spyOn(global, "fetch").mockResolvedValue({
+			ok: true,
+			json: async () => ({ data: items }),
+		} as Response);
+		const result = await RaukInventory.find(query);
+		expect(result).toEqual(items);
+		expect(fetch).toHaveBeenCalledWith(
+			`${config.apiBaseUrl}/query`,
+			expect.objectContaining({
+				method: "POST",
+				body: JSON.stringify(["find", query]),
+			}),
+		);
 	});
 
 	it("should delete via static method", async () => {
@@ -525,6 +593,47 @@ describe("RaukInventory", () => {
 			'RaukInventory must be initialized with "new RaukInventory(config)" before calling static methods.',
 		);
 	});
+});
+
+it("should update reserved availability metadata", async () => {
+	const config = {
+		apiKeyId: "123456789012345678901234", // 24 characters
+		apiSecret:
+			"1234567890123456789012345678901234567890123456789012345678901234", // 64 characters
+		apiPublicKey: "12345678901234567890123456789012", // 32 characters
+		apiBaseUrl: "https://inventory.rauk.local",
+	};
+	new RaukInventory(config);
+	const query = { sku: "ITEM-RESERVED" };
+	const update: OperationUpdateItem = {
+		"availability.reserved.temporary": false,
+		"availability.reserved.expiration": new Date("2025-01-25T14:30:00Z"),
+	};
+	jest.spyOn(global, "fetch").mockResolvedValue({
+		ok: true,
+		json: async () => ({
+			data: {
+				sku: "ITEM-RESERVED",
+				availability: {
+					reserved: { temporary: false, expiration: "2025-01-25T14:30:00Z" },
+				},
+			},
+		}),
+	} as Response);
+	const result = await RaukInventory.update(query, update);
+	expect(result).toEqual({
+		sku: "ITEM-RESERVED",
+		availability: {
+			reserved: { temporary: false, expiration: "2025-01-25T14:30:00Z" },
+		},
+	});
+	expect(fetch).toHaveBeenCalledWith(
+		`${config.apiBaseUrl}/query`,
+		expect.objectContaining({
+			method: "POST",
+			body: JSON.stringify(["findOneAndUpdate", query, update]),
+		}),
+	);
 });
 
 describe("RaukInventoryClient", () => {
