@@ -114,3 +114,4 @@ export interface QueryInventoryItem {
 	readonly updatedAt: Date;
 	readonly id: string;
 }
+

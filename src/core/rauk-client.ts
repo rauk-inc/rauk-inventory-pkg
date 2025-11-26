@@ -3,25 +3,19 @@ import type {
 	OperationUpdateItem,
 	OperationQuery,
 	OperationBulkWrite,
-	OperationBulkOperation,
-	OperationUpdateOne,
 	OperationAggregatePipeline,
-	OperationMatchStage,
 	OperationRequestOptions,
 	OperationDeleteResult,
 	OperationUpdateResult,
-	OperationInsertResult,
+	BulkWriteResult,
 } from "../types/operations";
 import type { InventoryItem } from "../types/item";
 import { signRequest } from "../utils/sign-request";
 import {
 	parseApiError,
-	RaukValidationError,
-	RaukAuthenticationError,
 	RaukNetworkError,
 	RaukError,
-	RaukApiErrorResponse,
-	isValidationError,
+	type RaukApiErrorResponse,
 } from "../utils/errors";
 
 class RaukInventoryClient {
@@ -339,7 +333,7 @@ class RaukInventoryClient {
 	public async bulkWrite(
 		operations: OperationBulkWrite,
 		options?: OperationRequestOptions,
-	): Promise<any> {
+	): Promise<BulkWriteResult> {
 		const requestArray = options
 			? ["bulkWrite", operations, options]
 			: ["bulkWrite", operations];
@@ -391,11 +385,11 @@ class RaukInventoryClient {
 	public async deleteOne(
 		query: OperationQuery,
 		options?: OperationRequestOptions,
-	): Promise<OperationDeleteResult> {
+	): Promise<InventoryItem | null> {
 		const requestArray = options
 			? ["deleteOne", query, options]
 			: ["deleteOne", query];
-		return this.request<OperationDeleteResult>(requestArray);
+		return this.request<InventoryItem | null>(requestArray);
 	}
 
 	/**

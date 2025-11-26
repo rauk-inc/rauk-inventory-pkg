@@ -254,12 +254,12 @@ export interface OperationSkipStage {
 // Unwind stage
 export interface OperationUnwindStage {
 	$unwind:
-		| string
-		| {
-				path: string;
-				includeArrayIndex?: string;
-				preserveNullAndEmptyArrays?: boolean;
-		  };
+	| string
+	| {
+		path: string;
+		includeArrayIndex?: string;
+		preserveNullAndEmptyArrays?: boolean;
+	};
 }
 
 // AddFields stage
@@ -298,7 +298,19 @@ export interface OperationIncludeDeletedOnly {
 
 // Response types
 export interface OperationDeleteResult {
+	acknowledged: boolean;
+	modifiedCount: number;
+	matchedCount: number;
+}
+
+export interface BulkWriteResult {
+	insertedCount: number;
+	matchedCount: number;
+	modifiedCount: number;
 	deletedCount: number;
+	upsertedCount: number;
+	upsertedIds: Record<string, string>;
+	insertedIds: Record<string, string>;
 }
 
 export interface OperationUpdateResult {

@@ -7,6 +7,7 @@ import type {
 	OperationDeleteResult,
 	OperationUpdateResult,
 	OperationUpdateItem,
+	BulkWriteResult,
 } from "./types/operations";
 import type { InventoryItem } from "./types/item";
 import { RaukInventoryClient } from "./core/rauk-client";
@@ -262,7 +263,7 @@ export class RaukInventory extends RaukInventoryClient {
 	public static async bulkWrite(
 		operations: OperationBulkWrite,
 		options?: OperationRequestOptions,
-	): Promise<any> {
+	): Promise<BulkWriteResult> {
 		if (!RaukInventory.instance) {
 			throw new Error(
 				'RaukInventory must be initialized with "new RaukInventory(config)" before calling static methods.',
@@ -318,7 +319,7 @@ export class RaukInventory extends RaukInventoryClient {
 	public static async deleteOne(
 		query: OperationQuery,
 		options?: OperationRequestOptions,
-	): Promise<OperationDeleteResult> {
+	): Promise<InventoryItem | null> {
 		if (!RaukInventory.instance) {
 			throw new Error(
 				'RaukInventory must be initialized with "new RaukInventory(config)" before calling static methods.',
