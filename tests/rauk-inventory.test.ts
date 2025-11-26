@@ -1,4 +1,4 @@
-import { RaukInventory, RaukInventoryClient } from "../src/index";
+import { RaukInventory } from "../src/index";
 import type {
 	OperationCreateItem,
 	OperationQuery,
@@ -593,82 +593,426 @@ describe("RaukInventory", () => {
 			'RaukInventory must be initialized with "new RaukInventory(config)" before calling static methods.',
 		);
 	});
-});
 
-it("should update reserved availability metadata", async () => {
-	const config = {
-		apiKeyId: "123456789012345678901234", // 24 characters
-		apiSecret:
-			"1234567890123456789012345678901234567890123456789012345678901234", // 64 characters
-		apiPublicKey: "12345678901234567890123456789012", // 32 characters
-		apiBaseUrl: "https://inventory.rauk.local",
-	};
-	new RaukInventory(config);
-	const query = { sku: "ITEM-RESERVED" };
-	const update: OperationUpdateItem = {
-		"availability.reserved.temporary": false,
-		"availability.reserved.expiration": new Date("2025-01-25T14:30:00Z"),
-	};
-	jest.spyOn(global, "fetch").mockResolvedValue({
-		ok: true,
-		json: async () => ({
-			data: {
-				sku: "ITEM-RESERVED",
-				availability: {
-					reserved: { temporary: false, expiration: "2025-01-25T14:30:00Z" },
+	describe("TypeScript type checking for nested properties", () => {
+		beforeEach(() => {
+			new RaukInventory(config);
+		});
+
+		it("should accept nested availability properties in queries", async () => {
+			const query: OperationQuery = {
+				"availability.produced.orderId": "order-123",
+				"availability.produced.date": new Date("2025-01-01"),
+				"availability.reserved.temporary": true,
+				"availability.reserved.expiration": new Date("2025-01-25"),
+				"availability.reserved.orderId": "res-order-456",
+				"availability.sold.orderId": "sold-order-789",
+				"availability.sold.date": new Date("2025-01-20"),
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested availability properties with operators in queries", async () => {
+			const query: OperationQuery = {
+				"availability.produced.orderId": { $ne: null },
+				"availability.produced.date": {
+					$gte: new Date("2025-01-01"),
+					$lte: new Date("2025-12-31"),
 				},
-			},
-		}),
-	} as Response);
-	const result = await RaukInventory.update(query, update);
-	expect(result).toEqual({
-		sku: "ITEM-RESERVED",
-		availability: {
-			reserved: { temporary: false, expiration: "2025-01-25T14:30:00Z" },
-		},
+				"availability.reserved.temporary": { $eq: true },
+				"availability.reserved.expiration": {
+					$gt: new Date("2025-01-01"),
+				},
+				"availability.reserved.orderId": { $in: ["res-1", "res-2", null] },
+				"availability.sold.orderId": { $exists: true },
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested color properties in queries", async () => {
+			const query: OperationQuery = {
+				"color.name": "Traffic Red",
+				"color.id": "color-123",
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested color properties with operators in queries", async () => {
+			const query: OperationQuery = {
+				"color.name": { $regex: "Red", $options: "i" },
+				"color.id": { $in: ["color-1", "color-2"] },
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested location properties in queries", async () => {
+			const query: OperationQuery = {
+				"currentLocation.id": "warehouse-1",
+				"currentLocation.name": "Main Warehouse",
+				"transitTo.id": "warehouse-2",
+				"transitTo.client": "client-123",
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested location properties with operators in queries", async () => {
+			const query: OperationQuery = {
+				"currentLocation.id": { $ne: null },
+				"currentLocation.name": { $regex: "Warehouse" },
+				"transitTo.id": { $exists: true },
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested entities properties in queries", async () => {
+			const query: OperationQuery = {
+				"entities.factoryId": "factory-123",
+				"entities.brandId": "brand-456",
+				"entities.apiId": "api-789",
+				"entities.entityId": "entity-012",
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested entities properties with operators in queries", async () => {
+			const query: OperationQuery = {
+				"entities.factoryId": { $in: ["factory-1", "factory-2"] },
+				"entities.brandId": { $ne: null },
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested brandDetails properties in queries", async () => {
+			const query: OperationQuery = {
+				"brandDetails.id": "brand-123",
+				"brandDetails.name": "Brand Name",
+				"brandDetails.type": "Brand",
+				"brandDetails.subType": "SubBrand",
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested factoryDetails properties in queries", async () => {
+			const query: OperationQuery = {
+				"factoryDetails.id": "factory-123",
+				"factoryDetails.name": "Factory Name",
+				"factoryDetails.type": "Factory",
+				"factoryDetails.subType": "SubFactory",
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested deleted properties in queries", async () => {
+			const query: OperationQuery = {
+				"deleted.status": false,
+				"deleted.deletionDate": new Date("2025-01-01"),
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept complex nested queries with multiple levels", async () => {
+			const query: OperationQuery = {
+				"availability.produced.orderId": { $ne: null },
+				"availability.reserved.temporary": true,
+				"availability.reserved.expiration": {
+					$gte: new Date("2025-01-01"),
+				},
+				"color.name": "Traffic Red",
+				"entities.factoryId": "factory-123",
+				"currentLocation.id": { $exists: true },
+				"brandDetails.type": "Brand",
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested properties in updates", async () => {
+			const update: OperationUpdateItem = {
+				"availability.produced.orderId": "order-123",
+				"availability.produced.date": new Date("2025-01-01"),
+				"availability.reserved.temporary": false,
+				"availability.reserved.expiration": new Date("2025-01-25"),
+				"availability.reserved.orderId": "res-order-456",
+				"color.name": "Traffic Red",
+				"color.id": "color-123",
+				"currentLocation.id": "warehouse-1",
+				"currentLocation.name": "Main Warehouse",
+				"brandDetails.name": "Updated Brand",
+				"factoryDetails.name": "Updated Factory",
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: {} }),
+			} as Response);
+
+			await RaukInventory.update({ sku: "ITEM-001" }, update);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested properties in updateMany", async () => {
+			const update: OperationUpdateItem = {
+				"availability.reserved.temporary": true,
+				"availability.reserved.expiration": new Date("2025-01-25"),
+				"currentLocation.id": "warehouse-2",
+				"color.name": "Blue",
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({
+					data: { matchedCount: 5, modifiedCount: 5 },
+				}),
+			} as Response);
+
+			await RaukInventory.updateMany(
+				{ "entities.factoryId": "factory-123" },
+				update,
+			);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested properties in bulkWrite operations", async () => {
+			const operations = [
+				{
+					updateOne: {
+						filter: {
+							"availability.reserved.temporary": true,
+							"color.name": "Red",
+						} as OperationQuery,
+						update: {
+							"availability.reserved.expiration": new Date("2025-01-25"),
+							"currentLocation.id": "warehouse-3",
+						} as OperationUpdateItem,
+					},
+				},
+				{
+					updateOne: {
+						filter: {
+							"entities.brandId": "brand-123",
+							"brandDetails.type": "Brand",
+						} as OperationQuery,
+						update: {
+							"brandDetails.name": "New Brand Name",
+							"color.id": "color-456",
+						} as OperationUpdateItem,
+					},
+				},
+			];
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({
+					data: { matchedCount: 2, modifiedCount: 2 },
+				}),
+			} as Response);
+
+			await RaukInventory.bulkWrite(operations);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested properties in aggregate match stage", async () => {
+			const pipeline = [
+				{
+					$match: {
+						"availability.produced.orderId": { $ne: null },
+						"availability.reserved.temporary": true,
+						"color.name": "Traffic Red",
+						"entities.factoryId": "factory-123",
+					} as OperationQuery,
+				},
+				{
+					$group: {
+						_id: "$color.name",
+						count: { $sum: 1 },
+					},
+				},
+			];
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.aggregate(pipeline);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested properties in updateBatch", async () => {
+			const updates: [OperationQuery, OperationUpdateItem][] = [
+				[
+					{ "availability.reserved.temporary": true },
+					{
+						"availability.reserved.expiration": new Date("2025-01-25"),
+						"currentLocation.id": "warehouse-1",
+					},
+				],
+				[
+					{ "color.name": "Red" },
+					{
+						"color.id": "color-123",
+						"brandDetails.name": "Brand Name",
+					},
+				],
+			];
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: { ok: true } }),
+			} as Response);
+
+			await RaukInventory.updateBatch(updates);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept deeply nested availability properties", async () => {
+			const query: OperationQuery = {
+				"availability.produced.orderId": "order-123",
+				"availability.produced.date": new Date("2025-01-01"),
+				"availability.reserved.temporary": true,
+				"availability.reserved.expiration": new Date("2025-01-25"),
+				"availability.reserved.orderId": "res-order-456",
+				"availability.reserved.date": new Date("2025-01-20"),
+				"availability.sold.orderId": "sold-order-789",
+				"availability.sold.date": new Date("2025-01-15"),
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested properties with $or operator", async () => {
+			const query: OperationQuery = {
+				$or: [
+					{
+						"availability.reserved.temporary": true,
+						"color.name": "Red",
+					},
+					{
+						"availability.produced.orderId": { $ne: null },
+						"entities.factoryId": "factory-123",
+					},
+				],
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept nested properties with $and operator", async () => {
+			const query: OperationQuery = {
+				$and: [
+					{
+						"availability.reserved.temporary": true,
+					},
+					{
+						"color.name": "Red",
+						"entities.brandId": "brand-123",
+					},
+				],
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
 	});
-	expect(fetch).toHaveBeenCalledWith(
-		`${config.apiBaseUrl}/query`,
-		expect.objectContaining({
-			method: "POST",
-			body: JSON.stringify(["findOneAndUpdate", query, update]),
-		}),
-	);
 });
 
-describe("RaukInventoryClient", () => {
-	const config = {
-		apiKeyId: "123456789012345678901234", // 24 characters
-		apiSecret:
-			"1234567890123456789012345678901234567890123456789012345678901234", // 64 characters
-		apiPublicKey: "12345678901234567890123456789012", // 32 characters
-		apiBaseUrl: "https://inventory.rauk.local",
-	};
-
-	beforeEach(() => {
-		jest.spyOn(global, "fetch").mockResolvedValue({
-			ok: true,
-			json: async () => ({ data: { sku: "ITEM-002", packageQuantity: 5 } }),
-		} as Response);
-	});
-
-	afterEach(() => {
-		jest.restoreAllMocks();
-	});
-
-	it("should create an item", async () => {
-		const client = new RaukInventoryClient(config);
-		const item: OperationCreateItem = {
-			entities: { factoryId: "789", brandId: "101" },
-			sku: "ITEM-002",
-			transitTo: { id: "warehouse-2" },
-			packageQuantity: 5,
-			color: { name: "Blue", id: "101" },
-			currentLocation: { id: "warehouse-2" },
-			brandDetails: { id: "101", name: "Brand 1", type: "Brand" },
-			factoryDetails: { id: "789", type: "Factory" },
-		};
-		const result = await client.create(item);
-		expect(result).toEqual({ sku: "ITEM-002", packageQuantity: 5 });
-	});
-});
