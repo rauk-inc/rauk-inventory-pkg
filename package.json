@@ -1,41 +1,41 @@
 {
-  "name": "@rauk/rauk-inventory",
-  "version": "0.1.5",
-  "description": "Rauk Inventory CRUD package, with built-in validation for Rauk-Inventory API interactions.",
-  "publishConfig": {
-    "access": "public"
-  },
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/esm/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/esm/index.d.ts"
-    }
-  },
-  "scripts": {
-    "build": "npm run build:esm && npm run build:cjs",
-    "build:esm": "tsc --module esnext --outDir dist/esm",
-    "build:cjs": "tsc --module commonjs --outDir dist/cjs",
-    "lint": "eslint \"src/**/*.ts\"",
-    "ts-check": "tsc --noEmit",
-    "test": "jest"
-  },
-  "files": [
-    "dist"
-  ],
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "devDependencies": {
-    "@jest/test-sequencer": "^30.2.0",
-    "@types/jest": "^30.0.0",
-    "@types/node": "^24.10.1",
-    "jest": "^30.2.0",
-    "ts-jest": "^29.4.5",
-    "typescript": "^5.9.3"
-  }
+	"name": "@rauk/rauk-inventory",
+	"version": "0.1.6",
+	"description": "Rauk Inventory CRUD package, with built-in validation for Rauk-Inventory API interactions.",
+	"publishConfig": {
+		"access": "public"
+	},
+	"main": "./dist/cjs/index.js",
+	"module": "./dist/esm/index.js",
+	"types": "./dist/esm/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/esm/index.js",
+			"require": "./dist/cjs/index.js",
+			"types": "./dist/esm/index.d.ts"
+		}
+	},
+	"scripts": {
+		"build": "npm run build:esm && npm run build:cjs",
+		"build:esm": "tsc --module esnext --outDir dist/esm",
+		"build:cjs": "tsc --module commonjs --outDir dist/cjs",
+		"lint": "eslint \"src/**/*.ts\"",
+		"ts-check": "tsc --noEmit",
+		"test": "jest"
+	},
+	"files": [
+		"dist"
+	],
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs",
+	"devDependencies": {
+		"@jest/test-sequencer": "^30.2.0",
+		"@types/jest": "^30.0.0",
+		"@types/node": "^24.10.1",
+		"jest": "^30.2.0",
+		"ts-jest": "^29.4.5",
+		"typescript": "^5.9.3"
+	}
 }
