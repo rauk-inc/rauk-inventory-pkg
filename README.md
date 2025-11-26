@@ -212,8 +212,8 @@ The SDK operates on inventory items with the following comprehensive schema:
   - Value: Status details object containing:
     - `orderId?`: Associated order identifier
     - `date?`: Status assignment date
-    - `temporary?`: Whether the status is temporary
-    - `expiration?`: When temporary status expires
+    - `temporary?`: Whether the status is temporary (only for reserved)
+    - `expiration?`: When temporary status expires (only for reserved)
 
 #### Business Details
 

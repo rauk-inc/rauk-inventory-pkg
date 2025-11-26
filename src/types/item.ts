@@ -1,90 +1,97 @@
 interface StatusDetails {
-  orderId?: string;
-  date?: Date;
-  temporary?: boolean;
-  expiration?: Date;
+	orderId?: string;
+	date?: Date;
+	temporary?: boolean;
+	expiration?: Date;
 }
 
+type AvailabilityStatuses<T> = {
+	produced?: T;
+	reserved?: T;
+	sold?: T;
+	[status: string]: T | undefined;
+};
+
 interface Entities {
-  readonly apiId: string;
-  readonly entityId: string;
-  readonly factoryId: string;
-  readonly brandId: string;
+	readonly apiId: string;
+	readonly entityId: string;
+	readonly factoryId: string;
+	readonly brandId: string;
 }
 
 interface Location {
-  id?: string | null;
-  name?: string | null;
-  details?: Record<string, any>;
+	id?: string | null;
+	name?: string | null;
+	details?: Record<string, any>;
 }
 
 interface TransitTo {
-  id?: string | null;
-  client?: string | null;
+	id?: string | null;
+	client?: string | null;
 }
 
 interface BrandDetails {
-  id?: string;
-  name?: string;
-  type?: string;
-  subType?: string;
+	id?: string;
+	name?: string;
+	type?: string;
+	subType?: string;
 }
 
 interface Color {
-  id?: string;
-  name: string;
+	id?: string;
+	name: string;
 }
 
 interface FactoryDetails {
-  id?: string;
-  name?: string;
-  type?: string;
-  subType?: string;
+	id?: string;
+	name?: string;
+	type?: string;
+	subType?: string;
 }
 
 interface Deleted {
-  status: boolean;
-  deletionDate?: Date;
+	status: boolean;
+	deletionDate?: Date;
 }
 
 interface LocationHistoryEntry {
-  id: string;
-  name: string;
-  date: Date;
+	id: string;
+	name: string;
+	date: Date;
 }
 
 export interface InventoryItem {
-  hardcode?: string;
-  readonly entities: Entities;
-  currentLocation: Location;
-  transitTo?: TransitTo;
-  availability: Map<"produced" | "reserved" | "sold", StatusDetails>;
-  sku: string;
-  brandDetails?: BrandDetails;
-  packageQuantity: number;
-  color: Color;
-  factoryDetails?: FactoryDetails;
-  deleted: Deleted;
-  locationHistory?: LocationHistoryEntry[];
-  createdAt?: Date;
-  updatedAt?: Date;
-  readonly id: string;
+	hardcode?: string;
+	readonly entities: Entities;
+	currentLocation: Location;
+	transitTo?: TransitTo;
+	availability: AvailabilityStatuses<StatusDetails>;
+	sku: string;
+	brandDetails?: BrandDetails;
+	packageQuantity: number;
+	color: Color;
+	factoryDetails?: FactoryDetails;
+	deleted: Deleted;
+	locationHistory?: LocationHistoryEntry[];
+	createdAt?: Date;
+	updatedAt?: Date;
+	readonly id: string;
 }
 
 export interface QueryInventoryItem {
-  readonly hardcode: string;
-  readonly entities: Entities;
-  readonly currentLocation: Location;
-  readonly transitTo: TransitTo;
-  readonly availability: Map<"produced" | "reserved" | "sold", StatusDetails>;
-  readonly sku: string;
-  readonly brandDetails: BrandDetails;
-  readonly packageQuantity: number;
-  readonly color: Color;
-  readonly factoryDetails: FactoryDetails;
-  readonly deleted: Deleted;
-  readonly locationHistory: LocationHistoryEntry[];
-  readonly createdAt: Date;
-  readonly updatedAt: Date;
-  readonly id: string;
+	readonly hardcode: string;
+	readonly entities: Entities;
+	readonly currentLocation: Location;
+	readonly transitTo: TransitTo;
+	readonly availability: AvailabilityStatuses<StatusDetails>;
+	readonly sku: string;
+	readonly brandDetails: BrandDetails;
+	readonly packageQuantity: number;
+	readonly color: Color;
+	readonly factoryDetails: FactoryDetails;
+	readonly deleted: Deleted;
+	readonly locationHistory: LocationHistoryEntry[];
+	readonly createdAt: Date;
+	readonly updatedAt: Date;
+	readonly id: string;
 }
