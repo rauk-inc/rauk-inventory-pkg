@@ -1,5 +1,5 @@
 interface BaseStatusDetails {
-	orderId?: string;
+	orderId?: string | null;
 	date?: Date;
 }
 
@@ -114,4 +114,3 @@ export interface QueryInventoryItem {
 	readonly updatedAt: Date;
 	readonly id: string;
 }
-

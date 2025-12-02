@@ -1,6 +1,5 @@
-import type { InventoryItem, UpdateInventoryItem } from "./item";
+import type { UpdateInventoryItem } from "./item";
 import type {
-	InventoryItemFieldValues,
 	DotNotationPaths,
 	UpdateInventoryItemFieldValues,
 } from "./parser";

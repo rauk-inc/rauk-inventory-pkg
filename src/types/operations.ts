@@ -254,12 +254,12 @@ export interface OperationSkipStage {
 // Unwind stage
 export interface OperationUnwindStage {
 	$unwind:
-	| string
-	| {
-		path: string;
-		includeArrayIndex?: string;
-		preserveNullAndEmptyArrays?: boolean;
-	};
+		| string
+		| {
+				path: string;
+				includeArrayIndex?: string;
+				preserveNullAndEmptyArrays?: boolean;
+		  };
 }
 
 // AddFields stage

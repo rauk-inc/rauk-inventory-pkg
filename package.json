@@ -1,6 +1,6 @@
 {
 	"name": "@rauk/rauk-inventory",
-	"version": "0.1.7",
+	"version": "0.1.8",
 	"description": "Rauk Inventory CRUD package, with built-in validation for Rauk-Inventory API interactions.",
 	"publishConfig": {
 		"access": "public"
@@ -19,7 +19,8 @@
 		"build": "npm run build:esm && npm run build:cjs",
 		"build:esm": "tsc --module esnext --outDir dist/esm",
 		"build:cjs": "tsc --module commonjs --outDir dist/cjs",
-		"lint": "eslint \"src/**/*.ts\"",
+		"lint": "biome check src",
+		"lint:fix": "biome check --write src",
 		"ts-check": "tsc --noEmit",
 		"test": "jest"
 	},
@@ -31,6 +32,7 @@
 	"license": "ISC",
 	"type": "commonjs",
 	"devDependencies": {
+		"@biomejs/biome": "^2.3.8",
 		"@jest/test-sequencer": "^30.2.0",
 		"@types/jest": "^30.0.0",
 		"@types/node": "^24.10.1",

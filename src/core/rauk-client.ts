@@ -1,22 +1,22 @@
-import type {
-	OperationCreateItem,
-	OperationUpdateItem,
-	OperationQuery,
-	OperationBulkWrite,
-	OperationAggregatePipeline,
-	OperationRequestOptions,
-	OperationDeleteResult,
-	OperationUpdateResult,
-	BulkWriteResult,
-} from "../types/operations";
 import type { InventoryItem } from "../types/item";
-import { signRequest } from "../utils/sign-request";
+import type {
+	BulkWriteResult,
+	OperationAggregatePipeline,
+	OperationBulkWrite,
+	OperationCreateItem,
+	OperationDeleteResult,
+	OperationQuery,
+	OperationRequestOptions,
+	OperationUpdateItem,
+	OperationUpdateResult,
+} from "../types/operations";
 import {
 	parseApiError,
-	RaukNetworkError,
-	RaukError,
 	type RaukApiErrorResponse,
+	RaukError,
+	RaukNetworkError,
 } from "../utils/errors";
+import { signRequest } from "../utils/sign-request";
 
 class RaukInventoryClient {
 	protected apiKeyId: string;
@@ -99,7 +99,7 @@ class RaukInventoryClient {
 
 				try {
 					errorBody = await response.json();
-				} catch (parseError) {
+				} catch {
 					// If we can't parse the error response, create a generic one
 					errorBody = {
 						success: false,

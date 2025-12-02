@@ -1,5 +1,5 @@
-import type { DotNotationPaths, QueryInventoryItemFieldValues } from "./parser";
 import type { QueryInventoryItem } from "./item";
+import type { DotNotationPaths, QueryInventoryItemFieldValues } from "./parser";
 
 type NullableValue<T> = T | null;
 type ComparableValue<T> = T extends number | string | Date ? T : never;

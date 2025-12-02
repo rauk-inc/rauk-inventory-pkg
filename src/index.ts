@@ -1,29 +1,29 @@
-import type {
-	OperationCreateItem,
-	OperationQuery,
-	OperationBulkWrite,
-	OperationAggregatePipeline,
-	OperationRequestOptions,
-	OperationDeleteResult,
-	OperationUpdateResult,
-	OperationUpdateItem,
-	BulkWriteResult,
-} from "./types/operations";
-import type { InventoryItem } from "./types/item";
 import { RaukInventoryClient } from "./core/rauk-client";
+import type { InventoryItem } from "./types/item";
+import type {
+	BulkWriteResult,
+	OperationAggregatePipeline,
+	OperationBulkWrite,
+	OperationCreateItem,
+	OperationDeleteResult,
+	OperationQuery,
+	OperationRequestOptions,
+	OperationUpdateItem,
+	OperationUpdateResult,
+} from "./types/operations";
 import {
-	RaukError,
-	RaukValidationError,
-	RaukAuthenticationError,
-	RaukNetworkError,
-	RaukApiError,
-	ValidationErrorDetail,
-	RaukApiErrorResponse,
-	RaukErrorOptions,
-	isRaukError,
-	isValidationError,
 	isAuthenticationError,
 	isNetworkError,
+	isRaukError,
+	isValidationError,
+	RaukApiError,
+	RaukApiErrorResponse,
+	RaukAuthenticationError,
+	RaukError,
+	RaukErrorOptions,
+	RaukNetworkError,
+	RaukValidationError,
+	ValidationErrorDetail,
 } from "./utils/errors";
 
 export class RaukInventory extends RaukInventoryClient {
@@ -381,8 +381,8 @@ export class RaukInventory extends RaukInventoryClient {
 }
 
 export default RaukInventory;
-export * from "./types/operations";
 export * from "./types/item";
+export * from "./types/operations";
 export { RaukInventoryClient };
 
 // Export error handling utilities

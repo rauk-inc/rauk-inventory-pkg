@@ -131,7 +131,9 @@ describe("RaukInventory", () => {
 
 	it("should update reserved availability metadata", async () => {
 		new RaukInventory(config);
-		const query = { sku: "ITEM-RESERVED" };
+		const query = {
+			sku: "ITEM-RESERVED",
+		};
 		const update: OperationUpdateItem = {
 			"availability.reserved.temporary": false,
 			"availability.reserved.expiration": new Date("2025-01-25T14:30:00Z"),
@@ -1015,4 +1017,3 @@ describe("RaukInventory", () => {
 		});
 	});
 });
-
