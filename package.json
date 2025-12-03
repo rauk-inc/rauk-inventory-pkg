@@ -1,6 +1,6 @@
 {
 	"name": "@rauk/rauk-inventory",
-	"version": "0.1.9",
+	"version": "0.2.0",
 	"description": "Rauk Inventory CRUD package, with built-in validation for Rauk-Inventory API interactions.",
 	"publishConfig": {
 		"access": "public"
