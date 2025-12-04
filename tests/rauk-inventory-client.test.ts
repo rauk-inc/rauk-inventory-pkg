@@ -17,7 +17,7 @@ describe("RaukInventoryClient", () => {
 	beforeEach(() => {
 		jest.spyOn(global, "fetch").mockResolvedValue({
 			ok: true,
-			json: async () => ({ data: { sku: "ITEM-002", packageQuantity: 5 } }),
+			json: async () => ({ data: { sku: "ITEM-002", qty: 5 } }),
 		} as Response);
 	});
 
@@ -31,14 +31,14 @@ describe("RaukInventoryClient", () => {
 			entities: { factoryId: "789", brandId: "101" },
 			sku: "ITEM-002",
 			transitTo: { id: "warehouse-2" },
-			packageQuantity: 5,
+			qty: 5,
 			color: { name: "Blue", id: "101" },
-			currentLocation: { id: "warehouse-2" },
+			currLoc: { id: "warehouse-2" },
 			brandDetails: { id: "101", name: "Brand 1", type: "Brand" },
 			factoryDetails: { id: "789", type: "Factory" },
 		};
 		const result = await client.create(item);
-		expect(result).toEqual({ sku: "ITEM-002", packageQuantity: 5 });
+		expect(result).toEqual({ sku: "ITEM-002", qty: 5 });
 	});
 
 	describe("TypeScript type checking for nested properties", () => {
@@ -49,7 +49,7 @@ describe("RaukInventoryClient", () => {
 				"availability.reserved.temporary": true,
 				"color.name": "Blue",
 				"entities.factoryId": "factory-123",
-				"currentLocation.id": "warehouse-1",
+				"currLoc.id": "warehouse-1",
 			};
 
 			jest.spyOn(global, "fetch").mockResolvedValue({
@@ -105,7 +105,7 @@ describe("RaukInventoryClient", () => {
 				"availability.reserved.temporary": false,
 				"availability.reserved.expiration": new Date("2025-01-25"),
 				"color.name": "Traffic Red",
-				"currentLocation.id": "warehouse-2",
+				"currLoc.id": "warehouse-2",
 				"brandDetails.name": "Updated Brand",
 			};
 
@@ -128,7 +128,7 @@ describe("RaukInventoryClient", () => {
 			const update: OperationUpdateItem = {
 				"availability.produced.orderId": "order-456",
 				"availability.produced.date": new Date("2025-01-01"),
-				"currentLocation.name": "Updated Warehouse",
+				"currLoc.name": "Updated Warehouse",
 				"factoryDetails.name": "Updated Factory",
 			};
 
@@ -154,7 +154,7 @@ describe("RaukInventoryClient", () => {
 						} as OperationQuery,
 						update: {
 							"availability.reserved.expiration": new Date("2025-01-25"),
-							"currentLocation.id": "warehouse-3",
+							"currLoc.id": "warehouse-3",
 						} as OperationUpdateItem,
 					},
 				},
@@ -190,7 +190,7 @@ describe("RaukInventoryClient", () => {
 					{ "availability.reserved.temporary": true },
 					{
 						"availability.reserved.expiration": new Date("2025-01-25"),
-						"currentLocation.id": "warehouse-1",
+						"currLoc.id": "warehouse-1",
 					},
 				],
 				[
@@ -362,4 +362,3 @@ describe("RaukInventoryClient", () => {
 		});
 	});
 });
-

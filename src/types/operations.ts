@@ -90,11 +90,11 @@ export type OperationAvailability = OperationAvailabilityMap<
 export interface OperationBaseItem {
 	hardcode?: string;
 	entities?: OperationEntities;
-	currentLocation?: OperationLocation;
+	currLoc?: OperationLocation;
 	transitTo?: OperationTransitTo;
 	availability?: OperationAvailability;
 	sku?: string;
-	packageQuantity?: number;
+	qty?: number;
 	color?: OperationColor;
 	brandDetails?: OperationBrandDetails;
 	factoryDetails?: OperationFactoryDetails;
@@ -104,13 +104,13 @@ export interface OperationBaseItem {
 
 // Create operation types
 export interface OperationCreateItem extends OperationBaseItem {
-	currentLocation: OperationLocation;
+	currLoc: OperationLocation;
 	entities: OperationEntities & {
 		factoryId: string;
 		brandId: string;
 	};
 	sku: string;
-	packageQuantity: number;
+	qty: number;
 	color: OperationColor & {
 		id: string;
 	};

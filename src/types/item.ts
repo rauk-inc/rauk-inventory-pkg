@@ -24,7 +24,12 @@ interface Entities {
 interface Location {
 	id?: string | null;
 	name?: string | null;
-	details?: Record<string, any>;
+	details?: {
+		wH: string;
+		rack: string;
+		shelf: string;
+		box: string;
+	};
 }
 
 interface TransitTo {
@@ -65,12 +70,12 @@ interface LocationHistoryEntry {
 export interface InventoryItem {
 	hardcode?: string;
 	readonly entities: Entities;
-	currentLocation: Location;
+	currLoc: Location;
 	transitTo?: TransitTo;
 	availability: AvailabilityStatuses;
 	sku: string;
 	brandDetails?: BrandDetails;
-	packageQuantity: number;
+	qty: number;
 	color: Color;
 	factoryDetails?: FactoryDetails;
 	deleted: Deleted;
@@ -83,12 +88,12 @@ export interface InventoryItem {
 export interface UpdateInventoryItem {
 	hardcode?: string;
 	readonly entities: Entities;
-	currentLocation: Location;
+	currLoc: Location;
 	transitTo?: TransitTo;
 	availability: AvailabilityStatuses;
 	sku: string;
 	brandDetails?: BrandDetails;
-	packageQuantity: number;
+	qty: number;
 	color: Color;
 	factoryDetails?: FactoryDetails;
 	deleted: Deleted;
@@ -100,12 +105,12 @@ export interface UpdateInventoryItem {
 export interface QueryInventoryItem {
 	readonly hardcode: string;
 	readonly entities: Entities;
-	readonly currentLocation: Location;
+	readonly currLoc: Location;
 	readonly transitTo: TransitTo;
 	readonly availability: AvailabilityStatuses;
 	readonly sku: string;
 	readonly brandDetails: BrandDetails;
-	readonly packageQuantity: number;
+	readonly qty: number;
 	readonly color: Color;
 	readonly factoryDetails: FactoryDetails;
 	readonly deleted: Deleted;

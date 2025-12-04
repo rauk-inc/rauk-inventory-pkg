@@ -25,7 +25,7 @@ describe("RaukInventory", () => {
 	beforeEach(() => {
 		jest.spyOn(global, "fetch").mockResolvedValue({
 			ok: true,
-			json: async () => ({ data: [{ sku: "ITEM-001", packageQuantity: 10 }] }),
+			json: async () => ({ data: [{ sku: "ITEM-001", qty: 10 }] }),
 		} as Response);
 	});
 
@@ -57,7 +57,7 @@ describe("RaukInventory", () => {
 		const client = new RaukInventory(config);
 		const query = { "color.name": "ITEM-001" };
 		const items = await client.find(query);
-		expect(items).toEqual([{ sku: "ITEM-001", packageQuantity: 10 }]);
+		expect(items).toEqual([{ sku: "ITEM-001", qty: 10 }]);
 		expect(fetch).toHaveBeenCalledWith(
 			`${config.apiBaseUrl}/query`,
 			expect.objectContaining({
@@ -71,7 +71,7 @@ describe("RaukInventory", () => {
 		new RaukInventory(config);
 		const query = { sku: "ITEM-001" };
 		const items = await RaukInventory.find(query);
-		expect(items).toEqual([{ sku: "ITEM-001", packageQuantity: 10 }]);
+		expect(items).toEqual([{ sku: "ITEM-001", qty: 10 }]);
 		expect(fetch).toHaveBeenCalledWith(
 			`${config.apiBaseUrl}/query`,
 			expect.objectContaining({
@@ -110,7 +110,7 @@ describe("RaukInventory", () => {
 				data: {
 					sku: "ITEM-001",
 					"color.name": "Traffic Red",
-					packageQuantity: 10,
+					qty: 10,
 				},
 			}),
 		} as Response);
@@ -118,7 +118,7 @@ describe("RaukInventory", () => {
 		expect(result).toEqual({
 			sku: "ITEM-001",
 			"color.name": "Traffic Red",
-			packageQuantity: 10,
+			qty: 10,
 		});
 		expect(fetch).toHaveBeenCalledWith(
 			`${config.apiBaseUrl}/query`,
@@ -168,7 +168,7 @@ describe("RaukInventory", () => {
 	it("should updateMany via static method", async () => {
 		new RaukInventory(config);
 		const query = { "entities.factoryId": "factory-789" };
-		const update = { "currentLocation.id": "warehouse-2" };
+		const update = { "currLoc.id": "warehouse-2" };
 		const updateResult = {
 			matchedCount: 5,
 			modifiedCount: 5,
@@ -193,15 +193,15 @@ describe("RaukInventory", () => {
 		const item: OperationCreateItem = {
 			entities: { factoryId: "789", brandId: "101" },
 			sku: "ITEM-003",
-			packageQuantity: 15,
+			qty: 15,
 			color: { name: "Green", id: "102" },
-			currentLocation: { id: "warehouse-3" },
+			currLoc: { id: "warehouse-3" },
 			brandDetails: { id: "101", name: "Brand 1", type: "Brand" },
 			factoryDetails: { id: "789", type: "Factory" },
 		};
 		const createdItem = {
 			sku: "ITEM-003",
-			packageQuantity: 15,
+			qty: 15,
 			color: { name: "Green", id: "102" },
 		};
 		jest.spyOn(global, "fetch").mockResolvedValue({
@@ -222,7 +222,7 @@ describe("RaukInventory", () => {
 	it("should findOne via static method", async () => {
 		new RaukInventory(config);
 		const query = { sku: "ITEM-001" };
-		const item = { sku: "ITEM-001", packageQuantity: 10 };
+		const item = { sku: "ITEM-001", qty: 10 };
 		jest.spyOn(global, "fetch").mockResolvedValue({
 			ok: true,
 			json: async () => ({ data: [item] }),
@@ -315,13 +315,13 @@ describe("RaukInventory", () => {
 			{
 				updateOne: {
 					filter: { sku: "ITEM-001" },
-					update: { packageQuantity: 20 },
+					update: { qty: 20 },
 				},
 			},
 			{
 				updateOne: {
 					filter: { sku: "ITEM-002" },
-					update: { "currentLocation.id": "warehouse-2" },
+					update: { "currLoc.id": "warehouse-2" },
 				},
 			},
 		];
@@ -391,13 +391,13 @@ describe("RaukInventory", () => {
 		jest.spyOn(global, "fetch").mockResolvedValue({
 			ok: true,
 			json: async () => ({
-				data: [{ packageQuantity: 10, sku: "ITEM-001" }],
+				data: [{ qty: 10, sku: "ITEM-001" }],
 			}),
 		} as Response);
 		const aggregate = await RaukInventory.aggregate([
 			{ $match: { "color.name": "Traffic Red" } },
 		]);
-		expect(aggregate).toEqual([{ packageQuantity: 10, sku: "ITEM-001" }]);
+		expect(aggregate).toEqual([{ qty: 10, sku: "ITEM-001" }]);
 	});
 
 	it("should throw RaukValidationError for validation failures", async () => {
@@ -677,8 +677,8 @@ describe("RaukInventory", () => {
 
 		it("should accept nested location properties in queries", async () => {
 			const query: OperationQuery = {
-				"currentLocation.id": "warehouse-1",
-				"currentLocation.name": "Main Warehouse",
+				"currLoc.id": "warehouse-1",
+				"currLoc.name": "Main Warehouse",
 				"transitTo.id": "warehouse-2",
 				"transitTo.client": "client-123",
 			};
@@ -694,8 +694,8 @@ describe("RaukInventory", () => {
 
 		it("should accept nested location properties with operators in queries", async () => {
 			const query: OperationQuery = {
-				"currentLocation.id": { $ne: null },
-				"currentLocation.name": { $regex: "Warehouse" },
+				"currLoc.id": { $ne: null },
+				"currLoc.name": { $regex: "Warehouse" },
 				"transitTo.id": { $exists: true },
 			};
 
@@ -798,7 +798,7 @@ describe("RaukInventory", () => {
 				},
 				"color.name": "Traffic Red",
 				"entities.factoryId": "factory-123",
-				"currentLocation.id": { $exists: true },
+				"currLoc.id": { $exists: true },
 				"brandDetails.type": "Brand",
 			};
 
@@ -820,8 +820,8 @@ describe("RaukInventory", () => {
 				"availability.reserved.orderId": "res-order-456",
 				"color.name": "Traffic Red",
 				"color.id": "color-123",
-				"currentLocation.id": "warehouse-1",
-				"currentLocation.name": "Main Warehouse",
+				"currLoc.id": "warehouse-1",
+				"currLoc.name": "Main Warehouse",
 				"brandDetails.name": "Updated Brand",
 				"factoryDetails.name": "Updated Factory",
 			};
@@ -839,7 +839,7 @@ describe("RaukInventory", () => {
 			const update: OperationUpdateItem = {
 				"availability.reserved.temporary": true,
 				"availability.reserved.expiration": new Date("2025-01-25"),
-				"currentLocation.id": "warehouse-2",
+				"currLoc.id": "warehouse-2",
 				"color.name": "Blue",
 			};
 
@@ -867,7 +867,7 @@ describe("RaukInventory", () => {
 						} as OperationQuery,
 						update: {
 							"availability.reserved.expiration": new Date("2025-01-25"),
-							"currentLocation.id": "warehouse-3",
+							"currLoc.id": "warehouse-3",
 						} as OperationUpdateItem,
 					},
 				},
@@ -929,7 +929,7 @@ describe("RaukInventory", () => {
 					{ "availability.reserved.temporary": true },
 					{
 						"availability.reserved.expiration": new Date("2025-01-25"),
-						"currentLocation.id": "warehouse-1",
+						"currLoc.id": "warehouse-1",
 					},
 				],
 				[
