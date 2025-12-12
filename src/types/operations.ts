@@ -162,6 +162,7 @@ export interface OperationQueryBrandDetails {
 	name?: string | Record<string, any>;
 	type?: string | Record<string, any>;
 	category?: string | Record<string, any>;
+	cId?: string | Record<string, any>;
 }
 
 export interface OperationQueryFactoryDetails {
@@ -169,6 +170,7 @@ export interface OperationQueryFactoryDetails {
 	name?: string | Record<string, any>;
 	type?: string | Record<string, any>;
 	category?: string | Record<string, any>;
+	cId?: string | Record<string, any>;
 }
 
 export interface OperationQueryStatusDetails {

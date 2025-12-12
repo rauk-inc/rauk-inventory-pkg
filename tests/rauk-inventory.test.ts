@@ -774,6 +774,34 @@ describe("RaukInventory", () => {
 			expect(fetch).toHaveBeenCalled();
 		});
 
+		it("should accept brandDetails.cId in queries", async () => {
+			const query: OperationQuery = {
+				"brandDetails.cId": "color-123",
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
+		it("should accept factoryDetails.cId in queries", async () => {
+			const query: OperationQuery = {
+				"factoryDetails.cId": "color-456",
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			expect(fetch).toHaveBeenCalled();
+		});
+
 		it("should accept nested deleted properties in queries", async () => {
 			const query: OperationQuery = {
 				"deleted.status": false,
