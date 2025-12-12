@@ -68,7 +68,8 @@ export interface OperationBrandDetails {
 	id?: string;
 	name?: string;
 	type?: string;
-	subType?: string;
+	category?: string;
+	cId?: string; // Color ID
 }
 
 // Factory Details types
@@ -76,7 +77,8 @@ export interface OperationFactoryDetails {
 	id?: string;
 	name?: string;
 	type?: string;
-	subType?: string;
+	category?: string;
+	cId?: string; // Color ID
 }
 
 // Availability types
@@ -159,14 +161,14 @@ export interface OperationQueryBrandDetails {
 	id?: string | Record<string, any>;
 	name?: string | Record<string, any>;
 	type?: string | Record<string, any>;
-	subType?: string | Record<string, any>;
+	category?: string | Record<string, any>;
 }
 
 export interface OperationQueryFactoryDetails {
 	id?: string | Record<string, any>;
 	name?: string | Record<string, any>;
 	type?: string | Record<string, any>;
-	subType?: string | Record<string, any>;
+	category?: string | Record<string, any>;
 }
 
 export interface OperationQueryStatusDetails {

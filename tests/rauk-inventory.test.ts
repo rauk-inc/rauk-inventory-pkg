@@ -745,7 +745,7 @@ describe("RaukInventory", () => {
 				"brandDetails.id": "brand-123",
 				"brandDetails.name": "Brand Name",
 				"brandDetails.type": "Brand",
-				"brandDetails.subType": "SubBrand",
+				"brandDetails.category": "SubBrand",
 			};
 
 			jest.spyOn(global, "fetch").mockResolvedValue({
@@ -762,7 +762,7 @@ describe("RaukInventory", () => {
 				"factoryDetails.id": "factory-123",
 				"factoryDetails.name": "Factory Name",
 				"factoryDetails.type": "Factory",
-				"factoryDetails.subType": "SubFactory",
+				"factoryDetails.category": "SubFactory",
 			};
 
 			jest.spyOn(global, "fetch").mockResolvedValue({

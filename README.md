@@ -221,12 +221,12 @@ The SDK operates on inventory items with the following comprehensive schema:
   - `id?`: Brand identifier
   - `name?`: Brand name
   - `type?`: Brand type classification
-  - `subType?`: Brand subtype classification
+  - `category?`: Brand category classification
 - **`factoryDetails?`** (object): Manufacturing facility information
   - `id?`: Factory identifier
   - `name?`: Factory name
   - `type?`: Factory type classification
-  - `subType?`: Factory subtype classification
+  - `category?`: Factory category classification
 
 #### System Fields
 
@@ -290,13 +290,13 @@ const sampleInventoryItem = {
     id: "brand-999",
     name: "Premium Footwear Co",
     type: "Fashion",
-    subType: "Athletic",
+    category: "Athletic",
   },
   factoryDetails: {
     id: "factory-001",
     name: "Global Manufacturing Inc",
     type: "Production",
-    subType: "Assembly",
+    category: "Assembly",
   },
   deleted: {
     status: false,

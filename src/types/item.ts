@@ -41,7 +41,8 @@ interface BrandDetails {
 	id?: string;
 	name?: string;
 	type?: string;
-	subType?: string;
+	category?: string;
+	cId?: string; // Color ID
 }
 
 interface Color {
@@ -53,7 +54,8 @@ interface FactoryDetails {
 	id?: string;
 	name?: string;
 	type?: string;
-	subType?: string;
+	category?: string;
+	cId?: string; // Color ID
 }
 
 interface Deleted {
