@@ -162,18 +162,18 @@ class RaukInventoryClient {
 	 *     brandId: "brand-101"
 	 *   },
 	 *   sku: "ITEM-001",
-	 *   packageQuantity: 10,
+	 *   qty: 10,
 	 *   color: { name: "Red" },
-	 *   currentLocation: { id: "warehouse-1" }
+	 *   currLoc: { id: "warehouse-1" }
 	 * });
 	 *
 	 * // With options
 	 * const newItemWithOptions = await raukInventory.create({
 	 *   entities: { apiId: "123", entityId: "456", factoryId: "789", brandId: "101" },
 	 *   sku: "ITEM-002",
-	 *   packageQuantity: 5,
+	 *   qty: 5,
 	 *   color: { name: "Blue" },
-	 *   currentLocation: { id: "warehouse-2" }
+	 *   currLoc: { id: "warehouse-2" }
 	 * }, {
 	 *   select: { sku: 1, color: 1 }
 	 * });
@@ -199,11 +199,11 @@ class RaukInventoryClient {
 	 * // Find items with structured query
 	 * const items = await raukInventory.find({
 	 *   entities: { factoryId: "factory-789" },
-	 *   packageQuantity: { $gte: 10 }
+	 *   qty: { $gte: 10 }
 	 * }, {
 	 *   limit: 20,
 	 *   sort: { createdAt: -1 },
-	 *   select: { sku: 1, packageQuantity: 1, color: 1 }
+	 *   select: { sku: 1, qty: 1, color: 1 }
 	 * });
 	 */
 	public async find(
@@ -226,7 +226,7 @@ class RaukInventoryClient {
 	 * const item = await raukInventory.findOne({
 	 *   entities: { factoryId: "factory-789" }
 	 * }, {
-	 *   select: { sku: 1, color: 1, packageQuantity: 1 }
+	 *   select: { sku: 1, color: 1, qty: 1 }
 	 * });
 	 */
 	public async findOne(
@@ -243,7 +243,7 @@ class RaukInventoryClient {
 	 * // Update one item by SKU
 	 * const result = await raukInventory.update(
 	 *   { sku: "ITEM-001" },
-	 *   { packageQuantity: 20, currentLocation: { id: "warehouse-2" } }
+	 *   { qty: 20, currLoc: { id: "warehouse-2" } }
 	 * );
 	 *
 	 * // Update with options
@@ -316,13 +316,13 @@ class RaukInventoryClient {
 	 *   {
 	 *     updateOne: {
 	 *       filter: { sku: "ITEM-001" },
-	 *       update: { packageQuantity: 20 }
+	 *       update: { qty: 20 }
 	 *     }
 	 *   },
 	 *   {
 	 *     updateOne: {
 	 *       filter: { sku: "ITEM-002" },
-	 *       update: { currentLocation: { id: "warehouse-2" } }
+	 *       update: { currLoc: { id: "warehouse-2" } }
 	 *     }
 	 *   }
 	 * ];
@@ -346,14 +346,14 @@ class RaukInventoryClient {
 	 * // Update all items from a specific factory
 	 * const result = await raukInventory.updateMany(
 	 *   { "entities.factoryId": "factory-789" },
-	 *   { currentLocation: { id: "warehouse-2" } }
+	 *   { currLoc: { id: "warehouse-2" } }
 	 * );
 	 *
 	 * // Update with options
 	 * const result = await raukInventory.updateMany(
-	 *   { packageQuantity: { $lte: 10 } },
-	 *   { packageQuantity: 20 },
-	 *   { select: { sku: 1, packageQuantity: 1 } }
+	 *   { qty: { $lte: 10 } },
+	 *   { qty: 20 },
+	 *   { select: { sku: 1, qty: 1 } }
 	 * );
 	 */
 	public async updateMany(
@@ -402,9 +402,9 @@ class RaukInventoryClient {
 	 *
 	 * // Delete with options
 	 * const result = await raukInventory.deleteMany({
-	 *   packageQuantity: { $lte: 5 }
+	 *   qty: { $lte: 5 }
 	 * }, {
-	 *   select: { sku: 1, packageQuantity: 1 }
+	 *   select: { sku: 1, qty: 1 }
 	 * });
 	 */
 	public async deleteMany(
@@ -423,8 +423,8 @@ class RaukInventoryClient {
 	 * @example
 	 * // Update multiple items in batch
 	 * const batchUpdates = [
-	 *   [{ sku: "ITEM-001" }, { packageQuantity: 20 } ],
-	 *   [{ sku: "ITEM-002" }, { currentLocation: { id: "warehouse-2" } } ],
+	 *   [{ sku: "ITEM-001" }, { qty: 20 } ],
+	 *   [{ sku: "ITEM-002" }, { currLoc: { id: "warehouse-2" } } ],
 	 *   [{ entities: { factoryId: "factory-789" } }, { color: { name: "Blue" } } ]
 	 * ];
 	 * const result = await raukInventory.updateBatch(batchUpdates);

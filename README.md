@@ -59,9 +59,9 @@ const newItem = await RaukInventory.create({
     brandId: "brand-101",
   },
   sku: "ITEM-001",
-  packageQuantity: 10,
+  qty: 10,
   color: { name: "Red" },
-  currentLocation: { id: "warehouse-1" },
+  currLoc: { id: "warehouse-1" },
 });
 
 // Find items
@@ -72,7 +72,7 @@ const items = await RaukInventory.find({
 // Update items
 const result = await RaukInventory.update(
   { sku: "ITEM-001" },
-  { packageQuantity: 20 }
+  { qty: 20 }
 );
 
 // Aggregate data
@@ -98,7 +98,7 @@ const items = await client.find({ sku: "ITEM-001" });
 const item = await client.findOne({ sku: "ITEM-001" });
 const result = await client.update(
   { sku: "ITEM-001" },
-  { packageQuantity: 20 } 
+  { qty: 20 } 
 );
 ```
 
@@ -117,9 +117,9 @@ await RaukInventory.create(item: OperationCreateItem, options?: OperationRequest
 **Required fields:**
 
 - `entities`: Object containing `factoryId`, `brandId`
-- `currentLocation`: Object with location details
+- `currLoc`: Object with location details
 - `sku`: Stock keeping unit identifier
-- `packageQuantity`: Number of items in package
+- `qty`: Number of items in package
 - `color`: Object with color information
 - `brandDetails`: Object with details from the brand
 - `factoryDetails`: Object with details from the brand
@@ -186,14 +186,14 @@ The SDK operates on inventory items with the following comprehensive schema:
   - `factoryId`: Factory/manufacturer identifier
   - `brandId`: Brand identifier
 - **`sku`** (string): Stock Keeping Unit identifier
-- **`packageQuantity`** (number): Number of items in this package/unit
+- **`qty`** (number): Number of items in this package/unit
 - **`color`** (object): Color information
   - `id?`: Optional color identifier
   - `name`: Color name (required)
 
 #### Location & Movement
 
-- **`currentLocation`** (object): Current physical location of the item
+- **`currLoc`** (object): Current physical location of the item
   - `id?`: Location identifier
   - `name?`: Location name
   - `details?`: Additional location metadata
@@ -221,12 +221,12 @@ The SDK operates on inventory items with the following comprehensive schema:
   - `id?`: Brand identifier
   - `name?`: Brand name
   - `type?`: Brand type classification
-  - `subType?`: Brand subtype classification
+  - `category?`: Brand category classification
 - **`factoryDetails?`** (object): Manufacturing facility information
   - `id?`: Factory identifier
   - `name?`: Factory name
   - `type?`: Factory type classification
-  - `subType?`: Factory subtype classification
+  - `category?`: Factory category classification
 
 #### System Fields
 
@@ -251,12 +251,12 @@ const sampleInventoryItem = {
     brandId: "brand-999",
   },
   sku: "RED-SHOES-42",
-  packageQuantity: 12,
+  qty: 12,
   color: {
     id: "color-red-001",
     name: "Crimson Red",
   },
-  currentLocation: {
+  currLoc: {
     id: "warehouse-nyc",
     name: "New York Warehouse",
     details: {
@@ -290,13 +290,13 @@ const sampleInventoryItem = {
     id: "brand-999",
     name: "Premium Footwear Co",
     type: "Fashion",
-    subType: "Athletic",
+    category: "Athletic",
   },
   factoryDetails: {
     id: "factory-001",
     name: "Global Manufacturing Inc",
     type: "Production",
-    subType: "Assembly",
+    category: "Assembly",
   },
   deleted: {
     status: false,
@@ -336,7 +336,7 @@ const result = await RaukInventory.aggregate([
     $group: {
       _id: "$sku",
       count: { $sum: 1 },
-      totalQuantity: { $sum: "$packageQuantity" },
+      totalQuantity: { $sum: "$qty" },
     },
   },
   { $sort: { count: -1 } },
@@ -358,7 +358,7 @@ const operations = [
   {
     updateOne: {
       filter: { sku: "ITEM-001" },
-      update: { packageQuantity: 20 },
+      update: { qty: 20 },
     },
   },
   {
@@ -371,9 +371,9 @@ const operations = [
           brandId: "101",
         },
         sku: "ITEM-003",
-        packageQuantity: 5,
+        qty: 5,
         color: { name: "Blue" },
-        currentLocation: { id: "warehouse-2" },
+        currLoc: { id: "warehouse-2" },
       },
     },
   },
@@ -394,7 +394,7 @@ await RaukInventory.updateBatch(updates: [OperationQuery, OperationUpdateItem][]
 
 ```typescript
 const batchUpdates = [
-  [{ sku: "ITEM-001" }, { packageQuantity: 20 } ],
+  [{ sku: "ITEM-001" }, { qty: 20 } ],
   [{ sku: "ITEM-002" }, { color: { name: "Blue" } }],
 ];
 

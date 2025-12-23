@@ -68,7 +68,8 @@ export interface OperationBrandDetails {
 	id?: string;
 	name?: string;
 	type?: string;
-	subType?: string;
+	category?: string;
+	cId?: string; // Color ID
 }
 
 // Factory Details types
@@ -76,7 +77,8 @@ export interface OperationFactoryDetails {
 	id?: string;
 	name?: string;
 	type?: string;
-	subType?: string;
+	category?: string;
+	cId?: string; // Color ID
 }
 
 // Availability types
@@ -90,11 +92,11 @@ export type OperationAvailability = OperationAvailabilityMap<
 export interface OperationBaseItem {
 	hardcode?: string;
 	entities?: OperationEntities;
-	currentLocation?: OperationLocation;
+	currLoc?: OperationLocation;
 	transitTo?: OperationTransitTo;
 	availability?: OperationAvailability;
 	sku?: string;
-	packageQuantity?: number;
+	qty?: number;
 	color?: OperationColor;
 	brandDetails?: OperationBrandDetails;
 	factoryDetails?: OperationFactoryDetails;
@@ -104,13 +106,13 @@ export interface OperationBaseItem {
 
 // Create operation types
 export interface OperationCreateItem extends OperationBaseItem {
-	currentLocation: OperationLocation;
+	currLoc: OperationLocation;
 	entities: OperationEntities & {
 		factoryId: string;
 		brandId: string;
 	};
 	sku: string;
-	packageQuantity: number;
+	qty: number;
 	color: OperationColor & {
 		id: string;
 	};
@@ -159,14 +161,16 @@ export interface OperationQueryBrandDetails {
 	id?: string | Record<string, any>;
 	name?: string | Record<string, any>;
 	type?: string | Record<string, any>;
-	subType?: string | Record<string, any>;
+	category?: string | Record<string, any>;
+	cId?: string | Record<string, any>;
 }
 
 export interface OperationQueryFactoryDetails {
 	id?: string | Record<string, any>;
 	name?: string | Record<string, any>;
 	type?: string | Record<string, any>;
-	subType?: string | Record<string, any>;
+	category?: string | Record<string, any>;
+	cId?: string | Record<string, any>;
 }
 
 export interface OperationQueryStatusDetails {
