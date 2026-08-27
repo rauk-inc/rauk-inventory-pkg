@@ -60,7 +60,7 @@ const newItem = await RaukInventory.create({
   },
   sku: "ITEM-001",
   qty: 10,
-  color: { name: "Red" },
+  variant: { name: "Red" },
   currLoc: { id: "warehouse-1" },
 });
 
@@ -120,7 +120,7 @@ await RaukInventory.create(item: OperationCreateItem, options?: OperationRequest
 - `currLoc`: Object with location details
 - `sku`: Stock keeping unit identifier
 - `qty`: Number of items in package
-- `color`: Object with color information
+- `variant`: Object with variant information
 - `brandDetails`: Object with details from the brand
 - `factoryDetails`: Object with details from the brand
 
@@ -187,9 +187,9 @@ The SDK operates on inventory items with the following comprehensive schema:
   - `brandId`: Brand identifier
 - **`sku`** (string): Stock Keeping Unit identifier
 - **`qty`** (number): Number of items in this package/unit
-- **`color`** (object): Color information
-  - `id?`: Optional color identifier
-  - `name`: Color name (required)
+- **`variant`** (object): Variant information
+  - `id?`: Optional variant identifier
+  - `name`: Variant name (required)
 
 #### Location & Movement
 
@@ -212,6 +212,7 @@ The SDK operates on inventory items with the following comprehensive schema:
   - Value: Status details object containing:
     - `orderId?`: Associated order identifier
     - `date?`: Status assignment date
+    - `qty?`: Optional count within this status (e.g. reserved.qty = 3 on an item with qty = 10 reserves N of M without splitting the row)
     - `temporary?`: Whether the status is temporary (only for reserved)
     - `expiration?`: When temporary status expires (only for reserved)
 
@@ -230,7 +231,7 @@ The SDK operates on inventory items with the following comprehensive schema:
 
 #### System Fields
 
-- **`hardcode?`** (string): Optional hardcoded identifier or reference
+- **`hardcode?`** (string): Optional unique-item / serial identifier (opt-in; omit for generic qty rows)
 - **`deleted`** (object): Soft deletion status
   - `status`: Whether the item is deleted (boolean)
   - `deletionDate?`: When the item was deleted
@@ -252,8 +253,8 @@ const sampleInventoryItem = {
   },
   sku: "RED-SHOES-42",
   qty: 12,
-  color: {
-    id: "color-red-001",
+  variant: {
+    id: "variant-red-001",
     name: "Crimson Red",
   },
   currLoc: {
@@ -372,7 +373,7 @@ const operations = [
         },
         sku: "ITEM-003",
         qty: 5,
-        color: { name: "Blue" },
+        variant: { name: "Blue" },
         currLoc: { id: "warehouse-2" },
       },
     },
@@ -395,7 +396,7 @@ await RaukInventory.updateBatch(updates: [OperationQuery, OperationUpdateItem][]
 ```typescript
 const batchUpdates = [
   [{ sku: "ITEM-001" }, { qty: 20 } ],
-  [{ sku: "ITEM-002" }, { color: { name: "Blue" } }],
+  [{ sku: "ITEM-002" }, { variant: { name: "Blue" } }],
 ];
 
 const result = await RaukInventory.updateBatch(batchUpdates);

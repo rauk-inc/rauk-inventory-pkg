@@ -32,7 +32,7 @@ describe("RaukInventoryClient", () => {
 			sku: "ITEM-002",
 			transitTo: { id: "warehouse-2" },
 			qty: 5,
-			color: { name: "Blue", id: "101" },
+			variant: { name: "Blue", id: "101" },
 			currLoc: { id: "warehouse-2" },
 			brandDetails: { id: "101", name: "Brand 1", type: "Brand" },
 			factoryDetails: { id: "789", type: "Factory" },
@@ -47,7 +47,7 @@ describe("RaukInventoryClient", () => {
 			const query: OperationQuery = {
 				"availability.produced.orderId": "order-123",
 				"availability.reserved.temporary": true,
-				"color.name": "Blue",
+				"variant.name": "Blue",
 				"entities.factoryId": "factory-123",
 				"currLoc.id": "warehouse-1",
 			};
@@ -68,7 +68,7 @@ describe("RaukInventoryClient", () => {
 				"availability.reserved.expiration": {
 					$gte: new Date("2025-01-01"),
 				},
-				"color.name": { $regex: "Blue", $options: "i" },
+				"variant.name": { $regex: "Blue", $options: "i" },
 				"entities.brandId": { $in: ["brand-1", "brand-2"] },
 			};
 
@@ -85,7 +85,7 @@ describe("RaukInventoryClient", () => {
 			const client = new RaukInventoryClient(config);
 			const query: OperationQuery = {
 				"availability.reserved.temporary": true,
-				"color.id": "color-123",
+				"variant.id": "variant-123",
 				"brandDetails.type": "Brand",
 			};
 
@@ -104,7 +104,7 @@ describe("RaukInventoryClient", () => {
 			const update: OperationUpdateItem = {
 				"availability.reserved.temporary": false,
 				"availability.reserved.expiration": new Date("2025-01-25"),
-				"color.name": "Traffic Red",
+				"variant.name": "Traffic Red",
 				"currLoc.id": "warehouse-2",
 				"brandDetails.name": "Updated Brand",
 			};
@@ -150,7 +150,7 @@ describe("RaukInventoryClient", () => {
 					updateOne: {
 						filter: {
 							"availability.reserved.temporary": true,
-							"color.name": "Red",
+							"variant.name": "Red",
 						} as OperationQuery,
 						update: {
 							"availability.reserved.expiration": new Date("2025-01-25"),
@@ -166,7 +166,7 @@ describe("RaukInventoryClient", () => {
 						} as OperationQuery,
 						update: {
 							"brandDetails.name": "New Brand Name",
-							"color.id": "color-456",
+							"variant.id": "variant-456",
 						} as OperationUpdateItem,
 					},
 				},
@@ -194,9 +194,9 @@ describe("RaukInventoryClient", () => {
 					},
 				],
 				[
-					{ "color.name": "Red" },
+					{ "variant.name": "Red" },
 					{
-						"color.id": "color-123",
+						"variant.id": "variant-123",
 						"brandDetails.name": "Brand Name",
 					},
 				],
@@ -220,13 +220,13 @@ describe("RaukInventoryClient", () => {
 					$match: {
 						"availability.produced.orderId": { $ne: null },
 						"availability.reserved.temporary": true,
-						"color.name": "Traffic Red",
+						"variant.name": "Traffic Red",
 						"entities.factoryId": "factory-123",
 					} as OperationQuery,
 				},
 				{
 					$group: {
-						_id: "$color.name",
+						_id: "$variant.name",
 						count: { $sum: 1 },
 					},
 				},
@@ -245,7 +245,7 @@ describe("RaukInventoryClient", () => {
 			const client = new RaukInventoryClient(config);
 			const query: OperationQuery = {
 				"entities.factoryId": "factory-123",
-				"color.name": "Red",
+				"variant.name": "Red",
 				"availability.sold.orderId": { $ne: null },
 			};
 
@@ -264,7 +264,7 @@ describe("RaukInventoryClient", () => {
 			const client = new RaukInventoryClient(config);
 			const query: OperationQuery = {
 				"availability.reserved.temporary": true,
-				"color.id": "color-123",
+				"variant.id": "variant-123",
 			};
 
 			jest.spyOn(global, "fetch").mockResolvedValue({
@@ -320,7 +320,7 @@ describe("RaukInventoryClient", () => {
 				$or: [
 					{
 						"availability.reserved.temporary": true,
-						"color.name": "Red",
+						"variant.name": "Red",
 					},
 					{
 						"availability.produced.orderId": { $ne: null },
@@ -346,7 +346,7 @@ describe("RaukInventoryClient", () => {
 						"availability.reserved.temporary": true,
 					},
 					{
-						"color.name": "Red",
+						"variant.name": "Red",
 						"entities.brandId": "brand-123",
 					},
 				],

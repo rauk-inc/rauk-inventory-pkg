@@ -55,7 +55,7 @@ describe("RaukInventory", () => {
 
 	it("should find items via instance method", async () => {
 		const client = new RaukInventory(config);
-		const query = { "color.name": "ITEM-001" };
+		const query = { "variant.name": "ITEM-001" };
 		const items = await client.find(query);
 		expect(items).toEqual([{ sku: "ITEM-001", qty: 10 }]);
 		expect(fetch).toHaveBeenCalledWith(
@@ -90,7 +90,7 @@ describe("RaukInventory", () => {
 	it("should updateBatch via static method", async () => {
 		new RaukInventory(config);
 		const updates: [OperationQuery, OperationUpdateItem][] = [
-			[{ id: "68e7f70f8d21cb8e86067aff" }, { "color.name": "Traffic Red" }],
+			[{ id: "68e7f70f8d21cb8e86067aff" }, { "variant.name": "Traffic Red" }],
 		];
 		jest.spyOn(global, "fetch").mockResolvedValue({
 			ok: true,
@@ -103,13 +103,13 @@ describe("RaukInventory", () => {
 	it("should update via static method", async () => {
 		new RaukInventory(config);
 		const query = { sku: "ITEM-001" };
-		const update = { "color.name": "Traffic Red" };
+		const update = { "variant.name": "Traffic Red" };
 		jest.spyOn(global, "fetch").mockResolvedValue({
 			ok: true,
 			json: async () => ({
 				data: {
 					sku: "ITEM-001",
-					"color.name": "Traffic Red",
+					"variant.name": "Traffic Red",
 					qty: 10,
 				},
 			}),
@@ -117,7 +117,7 @@ describe("RaukInventory", () => {
 		const result = await RaukInventory.update(query, update);
 		expect(result).toEqual({
 			sku: "ITEM-001",
-			"color.name": "Traffic Red",
+			"variant.name": "Traffic Red",
 			qty: 10,
 		});
 		expect(fetch).toHaveBeenCalledWith(
@@ -194,7 +194,7 @@ describe("RaukInventory", () => {
 			entities: { factoryId: "789", brandId: "101" },
 			sku: "ITEM-003",
 			qty: 15,
-			color: { name: "Green", id: "102" },
+			variant: { name: "Green", id: "102" },
 			currLoc: { id: "warehouse-3" },
 			brandDetails: { id: "101", name: "Brand 1", type: "Brand" },
 			factoryDetails: { id: "789", type: "Factory" },
@@ -202,7 +202,7 @@ describe("RaukInventory", () => {
 		const createdItem = {
 			sku: "ITEM-003",
 			qty: 15,
-			color: { name: "Green", id: "102" },
+			variant: { name: "Green", id: "102" },
 		};
 		jest.spyOn(global, "fetch").mockResolvedValue({
 			ok: true,
@@ -395,7 +395,7 @@ describe("RaukInventory", () => {
 			}),
 		} as Response);
 		const aggregate = await RaukInventory.aggregate([
-			{ $match: { "color.name": "Traffic Red" } },
+			{ $match: { "variant.name": "Traffic Red" } },
 		]);
 		expect(aggregate).toEqual([{ qty: 10, sku: "ITEM-001" }]);
 	});
@@ -645,10 +645,10 @@ describe("RaukInventory", () => {
 			expect(fetch).toHaveBeenCalled();
 		});
 
-		it("should accept nested color properties in queries", async () => {
+		it("should accept nested variant properties in queries", async () => {
 			const query: OperationQuery = {
-				"color.name": "Traffic Red",
-				"color.id": "color-123",
+				"variant.name": "Traffic Red",
+				"variant.id": "variant-123",
 			};
 
 			jest.spyOn(global, "fetch").mockResolvedValue({
@@ -660,10 +660,10 @@ describe("RaukInventory", () => {
 			expect(fetch).toHaveBeenCalled();
 		});
 
-		it("should accept nested color properties with operators in queries", async () => {
+		it("should accept nested variant properties with operators in queries", async () => {
 			const query: OperationQuery = {
-				"color.name": { $regex: "Red", $options: "i" },
-				"color.id": { $in: ["color-1", "color-2"] },
+				"variant.name": { $regex: "Red", $options: "i" },
+				"variant.id": { $in: ["variant-1", "variant-2"] },
 			};
 
 			jest.spyOn(global, "fetch").mockResolvedValue({
@@ -776,7 +776,7 @@ describe("RaukInventory", () => {
 
 		it("should accept brandDetails.cId in queries", async () => {
 			const query: OperationQuery = {
-				"brandDetails.cId": "color-123",
+				"brandDetails.cId": "variant-123",
 			};
 
 			jest.spyOn(global, "fetch").mockResolvedValue({
@@ -790,7 +790,7 @@ describe("RaukInventory", () => {
 
 		it("should accept factoryDetails.cId in queries", async () => {
 			const query: OperationQuery = {
-				"factoryDetails.cId": "color-456",
+				"factoryDetails.cId": "variant-456",
 			};
 
 			jest.spyOn(global, "fetch").mockResolvedValue({
@@ -824,7 +824,7 @@ describe("RaukInventory", () => {
 				"availability.reserved.expiration": {
 					$gte: new Date("2025-01-01"),
 				},
-				"color.name": "Traffic Red",
+				"variant.name": "Traffic Red",
 				"entities.factoryId": "factory-123",
 				"currLoc.id": { $exists: true },
 				"brandDetails.type": "Brand",
@@ -846,8 +846,8 @@ describe("RaukInventory", () => {
 				"availability.reserved.temporary": false,
 				"availability.reserved.expiration": new Date("2025-01-25"),
 				"availability.reserved.orderId": "res-order-456",
-				"color.name": "Traffic Red",
-				"color.id": "color-123",
+				"variant.name": "Traffic Red",
+				"variant.id": "variant-123",
 				"currLoc.id": "warehouse-1",
 				"currLoc.name": "Main Warehouse",
 				"brandDetails.name": "Updated Brand",
@@ -868,7 +868,7 @@ describe("RaukInventory", () => {
 				"availability.reserved.temporary": true,
 				"availability.reserved.expiration": new Date("2025-01-25"),
 				"currLoc.id": "warehouse-2",
-				"color.name": "Blue",
+				"variant.name": "Blue",
 			};
 
 			jest.spyOn(global, "fetch").mockResolvedValue({
@@ -891,7 +891,7 @@ describe("RaukInventory", () => {
 					updateOne: {
 						filter: {
 							"availability.reserved.temporary": true,
-							"color.name": "Red",
+							"variant.name": "Red",
 						} as OperationQuery,
 						update: {
 							"availability.reserved.expiration": new Date("2025-01-25"),
@@ -907,7 +907,7 @@ describe("RaukInventory", () => {
 						} as OperationQuery,
 						update: {
 							"brandDetails.name": "New Brand Name",
-							"color.id": "color-456",
+							"variant.id": "variant-456",
 						} as OperationUpdateItem,
 					},
 				},
@@ -930,13 +930,13 @@ describe("RaukInventory", () => {
 					$match: {
 						"availability.produced.orderId": { $ne: null },
 						"availability.reserved.temporary": true,
-						"color.name": "Traffic Red",
+						"variant.name": "Traffic Red",
 						"entities.factoryId": "factory-123",
 					} as OperationQuery,
 				},
 				{
 					$group: {
-						_id: "$color.name",
+						_id: "$variant.name",
 						count: { $sum: 1 },
 					},
 				},
@@ -961,9 +961,9 @@ describe("RaukInventory", () => {
 					},
 				],
 				[
-					{ "color.name": "Red" },
+					{ "variant.name": "Red" },
 					{
-						"color.id": "color-123",
+						"variant.id": "variant-123",
 						"brandDetails.name": "Brand Name",
 					},
 				],
@@ -1004,7 +1004,7 @@ describe("RaukInventory", () => {
 				$or: [
 					{
 						"availability.reserved.temporary": true,
-						"color.name": "Red",
+						"variant.name": "Red",
 					},
 					{
 						"availability.produced.orderId": { $ne: null },
@@ -1029,7 +1029,7 @@ describe("RaukInventory", () => {
 						"availability.reserved.temporary": true,
 					},
 					{
-						"color.name": "Red",
+						"variant.name": "Red",
 						"entities.brandId": "brand-123",
 					},
 				],
@@ -1042,6 +1042,209 @@ describe("RaukInventory", () => {
 
 			await RaukInventory.find(query);
 			expect(fetch).toHaveBeenCalled();
+		});
+	});
+
+	describe("variant grain (RAUK-442)", () => {
+		const baseCreate: OperationCreateItem = {
+			entities: { factoryId: "789", brandId: "101" },
+			sku: "226.18",
+			qty: 10,
+			variant: { name: "Traffic Red", id: "673c72fe0f62a7ce266db182" },
+			currLoc: { id: "warehouse-1" },
+			brandDetails: { id: "101", type: "Brand" },
+			factoryDetails: { id: "789", type: "Factory" },
+		};
+
+		it("creates with variant and sends variant, not color", async () => {
+			new RaukInventory(config);
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({
+					data: {
+						...baseCreate,
+						id: "inv-1",
+						qty: 10,
+						variant: baseCreate.variant,
+					},
+				}),
+			} as Response);
+
+			const result = await RaukInventory.create(baseCreate);
+			expect(result).toMatchObject({
+				variant: baseCreate.variant,
+				qty: 10,
+			});
+			expect(result).not.toHaveProperty("color");
+
+			const body = JSON.parse(
+				(fetch as jest.Mock).mock.calls[0][1].body as string,
+			);
+			expect(body[0]).toBe("insertOne");
+			expect(body[1]).toHaveProperty("variant");
+			expect(body[1]).not.toHaveProperty("color");
+		});
+
+		it("queries by variant.name, not color.name", async () => {
+			new RaukInventory(config);
+			const query: OperationQuery = { "variant.name": "Blue" };
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+
+			await RaukInventory.find(query);
+			const body = JSON.parse(
+				(fetch as jest.Mock).mock.calls[0][1].body as string,
+			);
+			expect(body[1]).toEqual({ "variant.name": "Blue" });
+			expect(body[1]).not.toHaveProperty("color.name");
+		});
+
+		it("updates variant without sending color", async () => {
+			new RaukInventory(config);
+			const update: OperationUpdateItem = {
+				variant: { name: "Ocean Blue" },
+			};
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({
+					data: { matchedCount: 1, modifiedCount: 1, acknowledged: true },
+				}),
+			} as Response);
+
+			await RaukInventory.update({ sku: "226.18" }, update);
+			const body = JSON.parse(
+				(fetch as jest.Mock).mock.calls[0][1].body as string,
+			);
+			expect(body[0]).toBe("findOneAndUpdate");
+			expect(body[2]).toEqual({ variant: { name: "Ocean Blue" } });
+			expect(body[2]).not.toHaveProperty("color");
+		});
+
+		it("creates a generic qty row without hardcode (serials opt-in)", async () => {
+			new RaukInventory(config);
+			const item: OperationCreateItem = {
+				...baseCreate,
+				qty: 25,
+				variant: { name: "Black", id: "var-black" },
+			};
+			expect(item.hardcode).toBeUndefined();
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: { ...item, id: "inv-2" } }),
+			} as Response);
+
+			await RaukInventory.create(item);
+			const body = JSON.parse(
+				(fetch as jest.Mock).mock.calls[0][1].body as string,
+			);
+			expect(body[1].qty).toBe(25);
+			expect(body[1].variant).toEqual({ name: "Black", id: "var-black" });
+			expect(body[1].hardcode).toBeUndefined();
+		});
+
+		it("allows hardcode when unique-item tracking is opted in", async () => {
+			new RaukInventory(config);
+			const item: OperationCreateItem = {
+				...baseCreate,
+				qty: 1,
+				variant: { name: "Black", id: "var-black" },
+				hardcode: "SN-ABC-001",
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: { ...item, id: "inv-3" } }),
+			} as Response);
+
+			await RaukInventory.create(item);
+			const body = JSON.parse(
+				(fetch as jest.Mock).mock.calls[0][1].body as string,
+			);
+			expect(body[1].hardcode).toBe("SN-ABC-001");
+			expect(body[1].qty).toBe(1);
+			expect(body[1].variant).toEqual({ name: "Black", id: "var-black" });
+		});
+
+		it("accepts reserved.qty for reserve-N-of-M without row split", async () => {
+			new RaukInventory(config);
+			const item: OperationCreateItem = {
+				...baseCreate,
+				qty: 10,
+				availability: {
+					produced: { orderId: null },
+					reserved: { orderId: "ORD-42", qty: 3 },
+					sold: { orderId: null },
+				},
+			};
+
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: { ...item, id: "inv-4" } }),
+			} as Response);
+
+			await RaukInventory.create(item);
+			const body = JSON.parse(
+				(fetch as jest.Mock).mock.calls[0][1].body as string,
+			);
+			expect(body[1].qty).toBe(10);
+			expect(body[1].availability.reserved).toEqual({
+				orderId: "ORD-42",
+				qty: 3,
+			});
+			expect(body[1].variant).toEqual(baseCreate.variant);
+		});
+
+		it("queries and updates availability.reserved.qty", async () => {
+			new RaukInventory(config);
+
+			const query: OperationQuery = {
+				"availability.reserved.qty": { $gte: 1 },
+			};
+			jest.spyOn(global, "fetch").mockResolvedValue({
+				ok: true,
+				json: async () => ({ data: [] }),
+			} as Response);
+			await RaukInventory.find(query);
+			const findBody = JSON.parse(
+				(fetch as jest.Mock).mock.calls.at(-1)![1].body as string,
+			);
+			expect(findBody[1]).toEqual({
+				"availability.reserved.qty": { $gte: 1 },
+			});
+
+			const update: OperationUpdateItem = {
+				"availability.reserved.qty": 4,
+				"availability.reserved.orderId": "ORD-99",
+			};
+			(fetch as jest.Mock).mockResolvedValue({
+				ok: true,
+				json: async () => ({
+					data: { matchedCount: 1, modifiedCount: 1, acknowledged: true },
+				}),
+			} as Response);
+			await RaukInventory.update({ sku: "226.18" }, update);
+			const updateBody = JSON.parse(
+				(fetch as jest.Mock).mock.calls.at(-1)![1].body as string,
+			);
+			expect(updateBody[0]).toBe("findOneAndUpdate");
+			expect(updateBody[2]).toEqual({
+				"availability.reserved.qty": 4,
+				"availability.reserved.orderId": "ORD-99",
+			});
+		});
+
+		it("OperationCreateItem / InventoryItem expose variant, not color", () => {
+			const createKeys = Object.keys(baseCreate);
+			expect(createKeys).toContain("variant");
+			expect(createKeys).not.toContain("color");
+
+			// Compile-time surface: variant is required on create; hardcode is optional
+			const typed: OperationCreateItem = baseCreate;
+			expect(typed.variant.name).toBe("Traffic Red");
+			expect(typed.hardcode).toBeUndefined();
 		});
 	});
 });
