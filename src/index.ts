@@ -78,7 +78,7 @@ export class RaukInventory extends RaukInventoryClient {
 	 *   },
 	 *   sku: "ITEM-001",
 	 *   qty: 10,
-	 *   color: { name: "Red" },
+	 *   variant: { name: "Red" },
 	 *   currLoc: { id: "warehouse-1" }
 	 * });
 	 *
@@ -87,10 +87,10 @@ export class RaukInventory extends RaukInventoryClient {
 	 *   entities: { apiId: "123", entityId: "456", factoryId: "789", brandId: "101" },
 	 *   sku: "ITEM-002",
 	 *   qty: 5,
-	 *   color: { name: "Blue" },
+	 *   variant: { name: "Blue" },
 	 *   currLoc: { id: "warehouse-2" }
 	 * }, {
-	 *   select: { sku: 1, color: 1 }
+	 *   select: { sku: 1, variant: 1 }
 	 * });
 	 */
 	public static async create(
@@ -120,7 +120,7 @@ export class RaukInventory extends RaukInventoryClient {
 	 * }, {
 	 *   limit: 20,
 	 *   sort: { createdAt: -1 },
-	 *   select: { sku: 1, qty: 1, color: 1 }
+	 *   select: { sku: 1, qty: 1, variant: 1 }
 	 * });
 	 */
 	public static async find(
@@ -147,7 +147,7 @@ export class RaukInventory extends RaukInventoryClient {
 	 * const item = await raukInventory.findOne({
 	 *   entities: { factoryId: "factory-789" }
 	 * }, {
-	 *   select: { sku: 1, color: 1, qty: 1 }
+	 *   select: { sku: 1, variant: 1, qty: 1 }
 	 * });
 	 */
 	public static async findOne(
@@ -173,8 +173,8 @@ export class RaukInventory extends RaukInventoryClient {
 	 * // Update with options
 	 * const result = await raukInventory.update(
 	 *   { entities: { factoryId: "factory-789" } },
-	 *   { { color: { name: "Blue" } } },
-	 *   { select: { sku: 1, color: 1 } }
+	 *   { { variant: { name: "Blue" } } },
+	 *   { select: { sku: 1, variant: 1 } }
 	 * );
 	 */
 	public static async update(
@@ -363,7 +363,7 @@ export class RaukInventory extends RaukInventoryClient {
 	 * const batchUpdates = [
 	 *   [{ sku: "ITEM-001" }, { qty: 20 } ],
 	 *   [{ sku: "ITEM-002" }, { currLoc: { id: "warehouse-2" } } ],
-	 *   [{ entities: { factoryId: "factory-789" } }, { color: { name: "Blue" } } ]
+	 *   [{ entities: { factoryId: "factory-789" } }, { variant: { name: "Blue" } } ]
 	 * ];
 	 * const result = await raukInventory.updateBatch(batchUpdates);
 	 */

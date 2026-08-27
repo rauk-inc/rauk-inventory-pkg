@@ -1,6 +1,12 @@
 interface BaseStatusDetails {
 	orderId?: string | null;
 	date?: Date;
+	/**
+	 * Optional count within this status. When set (e.g. reserved.qty = 3 on an
+	 * item with qty = 10), reserve-N-of-M does not require splitting the row.
+	 * When omitted, the status applies to the whole document (legacy / unique-item).
+	 */
+	qty?: number;
 }
 
 interface ReservedStatusDetails extends BaseStatusDetails {
@@ -42,10 +48,10 @@ interface BrandDetails {
 	name?: string;
 	type?: string;
 	category?: string;
-	cId?: string; // Color ID
+	cId?: string; // catalog variant id
 }
 
-interface Color {
+interface Variant {
 	id?: string;
 	name: string;
 }
@@ -55,7 +61,7 @@ interface FactoryDetails {
 	name?: string;
 	type?: string;
 	category?: string;
-	cId?: string; // Color ID
+	cId?: string; // catalog variant id
 }
 
 interface Deleted {
@@ -78,7 +84,7 @@ export interface InventoryItem {
 	sku: string;
 	brandDetails?: BrandDetails;
 	qty: number;
-	color: Color;
+	variant: Variant;
 	factoryDetails?: FactoryDetails;
 	deleted: Deleted;
 	locationHistory?: LocationHistoryEntry[];
@@ -96,7 +102,7 @@ export interface UpdateInventoryItem {
 	sku: string;
 	brandDetails?: BrandDetails;
 	qty: number;
-	color: Color;
+	variant: Variant;
 	factoryDetails?: FactoryDetails;
 	deleted: Deleted;
 	locationHistory?: LocationHistoryEntry[];
@@ -113,7 +119,7 @@ export interface QueryInventoryItem {
 	readonly sku: string;
 	readonly brandDetails: BrandDetails;
 	readonly qty: number;
-	readonly color: Color;
+	readonly variant: Variant;
 	readonly factoryDetails: FactoryDetails;
 	readonly deleted: Deleted;
 	readonly locationHistory: LocationHistoryEntry[];

@@ -1,9 +1,9 @@
 // Base types with ObjectId replaced by string
 import type { OperationQuery } from "./query";
 import type { OperationUpdateItem } from "./update";
-// Color types
+// Variant types
 
-export interface OperationColor {
+export interface OperationVariant {
 	id?: string;
 	name?: string;
 }
@@ -23,8 +23,12 @@ export interface OperationLocationHistoryEntry {
 
 // Status Details types
 export interface OperationStatusDetails {
-	orderId?: string;
+	orderId?: string | null;
 	date?: string;
+	/**
+	 * Optional count within this status (reserve-N-of-M without splitting the row).
+	 */
+	qty?: number;
 }
 
 export interface OperationReservedStatusDetails extends OperationStatusDetails {
@@ -69,7 +73,7 @@ export interface OperationBrandDetails {
 	name?: string;
 	type?: string;
 	category?: string;
-	cId?: string; // Color ID
+	cId?: string; // catalog variant id
 }
 
 // Factory Details types
@@ -78,7 +82,7 @@ export interface OperationFactoryDetails {
 	name?: string;
 	type?: string;
 	category?: string;
-	cId?: string; // Color ID
+	cId?: string; // catalog variant id
 }
 
 // Availability types
@@ -97,7 +101,7 @@ export interface OperationBaseItem {
 	availability?: OperationAvailability;
 	sku?: string;
 	qty?: number;
-	color?: OperationColor;
+	variant?: OperationVariant;
 	brandDetails?: OperationBrandDetails;
 	factoryDetails?: OperationFactoryDetails;
 	deleted?: OperationDeleted;
@@ -113,7 +117,7 @@ export interface OperationCreateItem extends OperationBaseItem {
 	};
 	sku: string;
 	qty: number;
-	color: OperationColor & {
+	variant: OperationVariant & {
 		id: string;
 	};
 	brandDetails: OperationBrandDetails & {
@@ -129,7 +133,7 @@ export interface OperationCreateItem extends OperationBaseItem {
 // Update operation types
 
 // Query operation types (for filtering)
-export interface OperationQueryColor {
+export interface OperationQueryVariant {
 	name?: string | Record<string, any>;
 	id?: string | Record<string, any>;
 }
@@ -174,8 +178,9 @@ export interface OperationQueryFactoryDetails {
 }
 
 export interface OperationQueryStatusDetails {
-	orderId?: string | Record<string, any>;
+	orderId?: string | null | Record<string, any>;
 	date?: string | Record<string, any>;
+	qty?: number | Record<string, any>;
 }
 
 export interface OperationQueryReservedStatusDetails
